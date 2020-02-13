@@ -35,7 +35,7 @@
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/node_modules/prettier" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.standard" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
@@ -48,15 +48,16 @@
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="prettierjs.PrettierConfiguration.Package" value="D:\Projects\HTML5\deflector\node_modules\prettier" />
-    <property name="settings.editor.selected.configurable" value="settings.javascript.linters.eslint" />
+    <property name="prettierjs.PrettierConfiguration.NodeInterpreter" value="project" />
+    <property name="prettierjs.PrettierConfiguration.Package" value="$PROJECT_DIR$/node_modules/prettier" />
+    <property name="settings.editor.selected.configurable" value="settings.javascript.prettier" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="D:\Projects\HTML5\deflector" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\Projects\HTML5\deflector\src" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Projects\HTML5\deflector" />
     </key>
   </component>
   <component name="SvnConfiguration">
@@ -70,6 +71,9 @@
       <option name="presentableId" value="Default" />
       <updated>1581486436809</updated>
       <workItem from="1581486439570" duration="5154000" />
+      <workItem from="1581540398695" duration="41000" />
+      <workItem from="1581540453727" duration="1912000" />
+      <workItem from="1581542385131" duration="854000" />
     </task>
     <servers />
   </component>
@@ -82,10 +86,35 @@
     </ignored-roots>
   </component>
   <component name="WindowStateProjectService">
-    <state x="461" y="163" key="SettingsEditor" timestamp="1581491647322">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="621" y="322" width="744" height="473" key="#com.intellij.ide.fileTemplates.ui.ConfigureTemplatesDialog" timestamp="1581540800230">
+      <screen x="70" y="27" width="1850" height="1053" />
+    </state>
+    <state x="621" y="322" width="744" height="473" key="#com.intellij.ide.fileTemplates.ui.ConfigureTemplatesDialog/70.27.1850.1053@70.27.1850.1053" timestamp="1581540800230" />
+    <state x="808" y="311" width="424" height="497" key="FileChooserDialogImpl" timestamp="1581542485461">
+      <screen x="70" y="27" width="1850" height="1053" />
+    </state>
+    <state x="808" y="311" width="424" height="497" key="FileChooserDialogImpl/70.27.1850.1053@70.27.1850.1053" timestamp="1581542485461" />
+    <state width="1827" height="252" key="GridCell.Tab.0.bottom" timestamp="1581542439878">
+      <screen x="70" y="27" width="1850" height="1053" />
+    </state>
+    <state width="1827" height="252" key="GridCell.Tab.0.bottom/70.27.1850.1053@70.27.1850.1053" timestamp="1581542439878" />
+    <state width="1827" height="252" key="GridCell.Tab.0.center" timestamp="1581542439877">
+      <screen x="70" y="27" width="1850" height="1053" />
+    </state>
+    <state width="1827" height="252" key="GridCell.Tab.0.center/70.27.1850.1053@70.27.1850.1053" timestamp="1581542439877" />
+    <state width="1827" height="252" key="GridCell.Tab.0.left" timestamp="1581542439877">
+      <screen x="70" y="27" width="1850" height="1053" />
+    </state>
+    <state width="1827" height="252" key="GridCell.Tab.0.left/70.27.1850.1053@70.27.1850.1053" timestamp="1581542439877" />
+    <state width="1827" height="252" key="GridCell.Tab.0.right" timestamp="1581542439877">
+      <screen x="70" y="27" width="1850" height="1053" />
+    </state>
+    <state width="1827" height="252" key="GridCell.Tab.0.right/70.27.1850.1053@70.27.1850.1053" timestamp="1581542439877" />
+    <state x="514" y="180" width="1016" height="743" key="SettingsEditor" timestamp="1581542489490">
+      <screen x="70" y="27" width="1850" height="1053" />
     </state>
     <state x="461" y="163" key="SettingsEditor/-1920.0.1920.1040/1920.1.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1581491647322" />
+    <state x="514" y="180" width="1016" height="743" key="SettingsEditor/70.27.1850.1053@70.27.1850.1053" timestamp="1581542489490" />
     <state x="616" y="240" key="run.anything.popup" timestamp="1581487861258">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
