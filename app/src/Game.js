@@ -12,6 +12,7 @@ export const ClickHandler = async evt => {
     console.log(evt.pageX, evt.pageY)
     console.log(evt.target.offsetLeft)
 
+    // TODO: Make this be based on env or a target, or something
     const res = await fetch('http://localhost:3000')
     console.log(await res.text())
 }
