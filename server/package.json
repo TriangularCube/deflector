@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "node src/server.js",
-    "deploy": "pm2 src/server.js"
+    "deploy": "pm2 start --env production"
   },
   "keywords": [],
   "author": "Michael Liu",
