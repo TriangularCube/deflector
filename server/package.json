@@ -1,0 +1,13 @@
+{
+  "name": "deflector-server",
+  "version": "0.0.1",
+  "description": "Server side logic for Deflector",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node src/server.js",
+    "deploy": "pm2 src/server.js"
+  },
+  "keywords": [],
+  "author": "Michael Liu",
+  "license": "MIT"
+}

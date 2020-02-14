@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from 'react'
 
 import { Container } from '@material-ui/core'
 
-import { Draw } from './Game'
+import { ClickHandler, Draw } from './Game'
 
 export const GameScreen = () => {
     const canvasRef = useRef(null)
@@ -26,7 +26,7 @@ export const GameScreen = () => {
 
     return (
         <Container maxWidth='lg'>
-            <canvas ref={canvasRef} />
+            <canvas ref={canvasRef} onClick={ClickHandler} />
         </Container>
     )
 }
