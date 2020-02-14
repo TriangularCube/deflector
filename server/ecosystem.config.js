@@ -2,7 +2,7 @@ module.exports = {
     apps : [
         {
             name: 'deflector-server',
-            script: 'server.js',
+            script: 'src/server.js',
 
             // Options reference: https://pm2.keymetrics.io/docs/usage/application-declaration/
             autorestart: true,
