@@ -9,6 +9,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import { About } from './About'
 import { GameScreen } from './GameScreen'
 import { NavBar } from './NavBar'
+import { Target } from './Target'
 
 const useStyles = makeStyles({
     wall: {
@@ -32,6 +33,10 @@ const App = () => {
                 <Switch>
                     <Route path='/about'>
                         <About />
+                    </Route>
+
+                    <Route path='/target'>
+                        <Target />
                     </Route>
 
                     <Route eaxct path='/'>

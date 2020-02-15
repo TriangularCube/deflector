@@ -9,7 +9,7 @@ const http = require('http')
 const server = http.createServer((req, res) => {
     res.statusCode = 200;
     res.setHeader('Content-Type', 'text/plain')
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:1234 https://www.deflector.io')
+    res.setHeader('Access-Control-Allow-Origin', '*')
     res.end('This is it!')
 })
 
