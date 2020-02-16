@@ -2,8 +2,8 @@ const http = require('http')
 
 // TODO Load Game State
 
-// let j = schedule.scheduleJob( '*/1 * * * * *', () => {
-//     console.log('tick')
+// Fire off scheduling
+require('./schedule')
 
 const {subscribe, submit} = require('./subscriptionHandler')
 
