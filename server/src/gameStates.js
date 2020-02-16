@@ -4,11 +4,14 @@ const games = []
 
 // TODO: Load games from DB
 
-const updateNewGame = () => {
-    games.push(makeGame())
+const makeNewGame = () => {
+
+    console.log('Make New Game Triggered!')
+    console.log(makeGame())
+    // TODO
 }
 
 module.exports = {
     currentGames: games,
-    updateNewGame
+    makeNewGame
 }
