@@ -12,7 +12,7 @@ import {
     ListItemText,
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import { AccountCircle as AccIcon } from '@material-ui/icons'
+import { LocationSearching } from '@material-ui/icons'
 
 const useStyles = makeStyles({
     spacer: {
@@ -46,7 +46,7 @@ export const NavBar = () => {
 
                 <div>
                     <IconButton color='inherit' onClick={openMenu}>
-                        <AccIcon />
+                        <LocationSearching />
                     </IconButton>
 
                     <Menu
