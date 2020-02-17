@@ -1,17 +1,17 @@
-const {makeGame} = require('./game')
+const { AsyncNedb } = require('nedb-async')
+const db = new AsyncNedb({filename: 'games.db', autoload: true })
 
-const games = []
+// Auto Compaction
+db.persistence.setAutocompactionInterval(60 * 60 * 1000) // Minutes * Seconds * Milliseconds
 
 // TODO: Load games from DB
 
 const makeNewGame = () => {
-
     console.log('Make New Game Triggered!')
     console.log(makeGame())
     // TODO
 }
 
 module.exports = {
-    currentGames: games,
-    makeNewGame
+    makeNewGame,
 }

@@ -32,6 +32,10 @@ export const GameScreen = () => {
             console.log(JSON.parse(event.data))
         })
 
+        eventSource.addEventListener('tick', event => {
+            console.log(Date(event.data).toString())
+        })
+
         eventSource.onerror = () => {
             console.error('SSE Dropped')
         }
