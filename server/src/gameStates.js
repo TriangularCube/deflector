@@ -4,18 +4,33 @@ const db = new AsyncNedb({filename: 'games.db', autoload: true })
 // Auto Compaction
 db.persistence.setAutocompactionInterval(60 * 60 * 1000) // Minutes * Seconds * Milliseconds
 
-// TODO: Load games from DB
+db.getNextId = async () => {
+    let id = 1
+    try {
+        const highest = await db.asyncFindOne({}, [['sort', {_id:-1}]])
+        if(highest){
+            id = highest._id + 1
+        }
+    } catch ( err ) {
+        // Some sort of database error
+    }
 
-// const { generateGameBoard } = require('./boardGenerator')
+    return id
+}
 
 const { generateBoard } = require('./generators/v1')
 
-console.log(generateBoard())
-
-const makeNewGame = () => {
+const makeNewGame = async () => {
     console.log('Make New Game Triggered!')
-    console.log(generateBoard())
-    // TODO
+
+    const newBoard = generateBoard()
+
+    const id = await db.getNextId()
+    await db.asyncInsert({
+        _id: id,
+        time: Date.now(),
+        board: newBoard
+    })
 }
 
 module.exports = {

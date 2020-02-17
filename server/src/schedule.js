@@ -9,4 +9,5 @@ const { makeNewGame } = require('./gameStates')
 
 let job = schedule.scheduleJob( rule, () => {
     makeNewGame()
+    // TODO broadcast change
 })

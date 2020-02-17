@@ -1,7 +1,5 @@
 const uuid = require('uuid/v1')
 
-// const {currentGames} = require('./gameStates')
-
 const listOfConnections = {}
 
 const subscribe = (req, res) => {

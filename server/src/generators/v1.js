@@ -337,6 +337,7 @@ const quads = {
 const rotateQuad = (quad, times) => {
     let newQuad = deepcopy(quad)
 
+    // Rotate quad X times based on position
     for (let i = 0; i < times; i++) {
         // For each wall
         newQuad.walls.forEach(wall => {
@@ -364,7 +365,38 @@ const rotateCoord = coord => {
     return [7 - coord[1], coord[0]]
 }
 
+const shiftQuad = (quad, x, y) => {
+    const newQuad = deepcopy(quad)
+
+    // For each wall
+    newQuad.walls.forEach(wall => {
+        // For each coordinate in a wall pair
+        wall.forEach((coord, index, thisArray) => {
+            // Modify the coordinate
+            thisArray[index] = shiftCoord(coord, x, y)
+        })
+    })
+
+    newQuad.goals.forEach((goal, index, thisArray) => {
+        thisArray[index].coordinate = shiftCoord(goal.coordinate, x, y)
+    })
+
+    newQuad.notValid.forEach((element, index, thisArray) => {
+        thisArray[index] = shiftCoord(element, x, y)
+    })
+
+    return newQuad
+}
+
+const shiftCoord = (coord, x, y) => {
+    return [coord[0] + x, coord[1] + y]
+}
+
 const generateBoard = () => {
+
+    const newBoard = {}
+
+    // Randomly choose 4 boards
     const quadrants = [
         deepcopy(quads.A[Math.floor(Math.random() * quads.A.length)]),
         deepcopy(quads.B[Math.floor(Math.random() * quads.B.length)]),
@@ -372,13 +404,39 @@ const generateBoard = () => {
         deepcopy(quads.D[Math.floor(Math.random() * quads.D.length)]),
     ]
 
+    // Shuffle them
     shuffle(quadrants)
 
-    for(const i in [1,2,3]){
+    // Then rotate them as necessary
+    for(let i = 1; i < 4; i++){
         quadrants[i] = rotateQuad(quadrants[i], i)
     }
 
-    return quadrants
+    // Shift the quadrants as needed
+    quadrants[1] = shiftQuad(quadrants[1], 8, 0)
+    quadrants[2] = shiftQuad(quadrants[2], 8, 8)
+    quadrants[3] = shiftQuad(quadrants[3], 0, 8)
+
+    // Pull out all walls
+    const newWalls = []
+    quadrants.forEach( quadrant => {
+        newWalls.push(...quadrant.walls)
+    })
+    newBoard.walls = newWalls
+
+    const newGoals = []
+    quadrants.forEach(quadrant => {
+        newGoals.push(...quadrant.goals)
+    })
+    newBoard.goals = newGoals
+
+    const newNotValid = []
+    quadrants.forEach( quadrant => {
+        newNotValid.push(...quadrant.notValid)
+    })
+    newBoard.notValid = newNotValid
+
+    return newBoard
 }
 
 module.exports = {
