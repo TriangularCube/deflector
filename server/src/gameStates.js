@@ -6,11 +6,15 @@ db.persistence.setAutocompactionInterval(60 * 60 * 1000) // Minutes * Seconds * 
 
 // TODO: Load games from DB
 
-const { generateGameBoard } = require('./boardGenerator')
+// const { generateGameBoard } = require('./boardGenerator')
+
+const { generateBoard } = require('./generators/v1')
+
+console.log(generateBoard())
 
 const makeNewGame = () => {
     console.log('Make New Game Triggered!')
-    console.log(generateGameBoard())
+    console.log(generateBoard())
     // TODO
 }
 

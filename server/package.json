@@ -11,8 +11,10 @@
   "author": "Michael Liu",
   "license": "MIT",
   "dependencies": {
+    "deepcopy": "^2.0.0",
     "nedb-async": "^0.1.3",
     "node-schedule": "^1.3.2",
+    "shuffle-array": "^1.0.1",
     "uuid": "^3.4.0"
   },
   "devDependencies": {

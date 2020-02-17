@@ -32,8 +32,9 @@ export const GameScreen = () => {
             console.log(JSON.parse(event.data))
         })
 
+        // DEBUG
         eventSource.addEventListener('tick', event => {
-            console.log(Date(event.data).toString())
+            setMessage(Date(event.data).toString())
         })
 
         eventSource.onerror = () => {
