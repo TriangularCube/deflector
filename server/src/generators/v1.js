@@ -12,6 +12,8 @@
 const shuffle = require('shuffle-array')
 const deepcopy = require('deepcopy')
 
+const {serializeGameBoard} = require('./serializer')
+
 const quads = {
     A: [
         {
@@ -408,7 +410,7 @@ const generateBoard = () => {
     shuffle(quadrants)
 
     // Then rotate them as necessary
-    for(let i = 1; i < 4; i++){
+    for(const i of [1,2,3]){
         quadrants[i] = rotateQuad(quadrants[i], i)
     }
 
@@ -436,7 +438,8 @@ const generateBoard = () => {
     })
     newBoard.notValid = newNotValid
 
-    return newBoard
+    return serializeGameBoard(newBoard)
+
 }
 
 module.exports = {

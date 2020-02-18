@@ -26,7 +26,7 @@ const makeNewGame = async () => {
     const newBoard = generateBoard()
 
     const id = await db.getNextId()
-    await db.asyncInsert({
+    db.insert({
         _id: id,
         time: Date.now(),
         board: newBoard
