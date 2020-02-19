@@ -336,6 +336,7 @@ const quads = {
     ],
 }
 
+//region Utilities
 const rotateQuad = (quad, times) => {
     let newQuad = deepcopy(quad)
 
@@ -393,10 +394,16 @@ const shiftQuad = (quad, x, y) => {
 const shiftCoord = (coord, x, y) => {
     return [coord[0] + x, coord[1] + y]
 }
+//endregion
 
 const generateBoard = () => {
 
     const newBoard = {}
+
+    newBoard.size = {
+        x: 16,
+        y: 16
+    }
 
     // Randomly choose 4 boards
     const quadrants = [
@@ -438,7 +445,9 @@ const generateBoard = () => {
     })
     newBoard.notValid = newNotValid
 
-    return serializeGameBoard(newBoard)
+    // TODO: Generate an actual puzzle
+
+    return newBoard
 
 }
 

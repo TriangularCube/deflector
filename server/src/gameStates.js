@@ -19,6 +19,7 @@ db.getNextId = async () => {
 }
 
 const { generateBoard } = require('./generators/v1')
+const { generatePuzzleFromBoard } = require('./generators/puzzleGenerator')
 
 const makeNewGame = async () => {
     console.log('Make New Game Triggered!')
@@ -29,10 +30,13 @@ const makeNewGame = async () => {
     db.insert({
         _id: id,
         time: Date.now(),
-        board: newBoard
+        board: newBoard,
+        puzzel: {}
     })
 }
 
 module.exports = {
     makeNewGame,
 }
+
+generatePuzzleFromBoard(generateBoard())
