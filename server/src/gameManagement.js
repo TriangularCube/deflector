@@ -21,9 +21,11 @@ db.getNextId = async () => {
 const { generateBoard } = require('./data/boardGenerators/v1')
 const { generatePuzzleFromBoard } = require('./data/puzzleGenerators/v1')
 
-const makeNewGame = async () => {
-    console.log('Make New Game Triggered!')
+const getNewestGame = async () => {
+    return await db.asyncFindOne({}, [['sort', {_id: -1}]])
+}
 
+const makeNewGame = async () => {
     const newBoard = generateBoard()
 
     const id = await db.getNextId()
@@ -31,12 +33,18 @@ const makeNewGame = async () => {
         _id: id,
         time: Date.now(),
         board: newBoard,
-        puzzel: {}
+        puzzle: generatePuzzleFromBoard(newBoard)
     })
 }
 
 module.exports = {
     makeNewGame,
+    getNewestGame
 }
 
-generatePuzzleFromBoard(generateBoard())
+// Make sure to seed the DB with at least one game
+getNewestGame().then(res => {
+    if( !res ){
+        makeNewGame()
+    }
+})

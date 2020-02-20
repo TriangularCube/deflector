@@ -4,6 +4,7 @@
   "description": "Server side logic for Deflector",
   "main": "index.js",
   "scripts": {
+    "test": "node test/tests.js",
     "start": "nodemon src/server.js",
     "deploy": "npm i && pm2 start --env production"
   },

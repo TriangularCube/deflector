@@ -5,7 +5,7 @@ let rule = new schedule.RecurrenceRule()
 rule.hour = new schedule.Range(0, 23)
 rule.minute = 0
 
-const { makeNewGame } = require('./gameStates')
+const { makeNewGame } = require('./gameManagement')
 
 let job = schedule.scheduleJob( rule, () => {
     makeNewGame()

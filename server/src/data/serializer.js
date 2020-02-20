@@ -1,4 +1,4 @@
-const serializeGameBoard = board => {
+const serializeGameBoard = (board, puzzle) => {
 
     let serializedString = ''
 
@@ -34,6 +34,8 @@ const serializeGameBoard = board => {
         serializedString += coord[1].toString(16)
 
     })
+
+    // TODO: serialize the puzzle section
 
     return serializedString
 
