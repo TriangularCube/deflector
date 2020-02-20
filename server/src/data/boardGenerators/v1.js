@@ -12,7 +12,7 @@
 const shuffle = require('shuffle-array')
 const deepcopy = require('deepcopy')
 
-const {serializeGameBoard} = require('./serializer')
+const {serializeGameBoard} = require('../serializer')
 
 const quads = {
     A: [

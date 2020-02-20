@@ -18,8 +18,8 @@ db.getNextId = async () => {
     return id
 }
 
-const { generateBoard } = require('./generators/v1')
-const { generatePuzzleFromBoard } = require('./generators/puzzleGenerator')
+const { generateBoard } = require('./data/boardGenerators/v1')
+const { generatePuzzleFromBoard } = require('./data/puzzleGenerators/v1')
 
 const makeNewGame = async () => {
     console.log('Make New Game Triggered!')
