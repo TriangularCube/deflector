@@ -4,9 +4,7 @@ const listOfConnections = {}
 
 const connect = (req, res) => {
     // Get tokens in request
-    const tokens = req.url.slice(1).split('/').slice(1)
-
-    console.log(tokens)
+    const tokens = req.url.split('/').slice(2)
 
     // Generate an ID for client
     const clientID = uuid()

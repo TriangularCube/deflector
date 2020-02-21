@@ -1,13 +1,13 @@
 const { AsyncNedb } = require('nedb-async')
-const db = new AsyncNedb({filename: 'games.db', autoload: true })
+const classicDB = new AsyncNedb({filename: 'games.db', autoload: true })
 
 // Auto Compaction
-db.persistence.setAutocompactionInterval(60 * 60 * 1000) // Minutes * Seconds * Milliseconds
+classicDB.persistence.setAutocompactionInterval(60 * 60 * 1000) // Minutes * Seconds * Milliseconds
 
-db.getNextId = async () => {
+classicDB.getNextId = async () => {
     let id = 1
     try {
-        const highest = await db.asyncFindOne({}, [['sort', {_id:-1}]])
+        const highest = await classicDB.asyncFindOne({}, [['sort', {_id:-1}]])
         if(highest){
             id = highest._id + 1
         }
@@ -22,14 +22,14 @@ const { generateBoard } = require('./data/boardGenerators/v1')
 const { generatePuzzleFromBoard } = require('./data/puzzleGenerators/v1')
 
 const getNewestGame = async () => {
-    return await db.asyncFindOne({}, [['sort', {_id: -1}]])
+    return await classicDB.asyncFindOne({}, [['sort', {_id: -1}]])
 }
 
 const makeNewGame = async () => {
     const newBoard = generateBoard()
 
-    const id = await db.getNextId()
-    db.insert({
+    const id = await classicDB.getNextId()
+    classicDB.insert({
         _id: id,
         time: Date.now(),
         board: newBoard,
