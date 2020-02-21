@@ -5,10 +5,11 @@ const http = require('http')
 // Fire off scheduling
 require('./schedule')
 
-const {subscribe, submit} = require('./requestHandlers')
+const {connect, submit} = require('./requestHandlers')
 
 const server = http.createServer((req, res) => {
 
+    // Allow all OPTIONS requests
     if (req.method === 'OPTIONS') {
         res.writeHead(200, {
             'Access-Control-Allow-Origin': '*',
@@ -20,13 +21,14 @@ const server = http.createServer((req, res) => {
         return
     }
 
-    if (req.method === 'GET' && req.url === '/subscribe') {
-        subscribe(req, res)
+    // Register for all puzzle endpoints
+    if (req.method === 'GET' && req.url.includes( '/puzzle' ) ) {
+        connect(req, res)
         return
     }
 
+    // Register for submit
     if (req.method === 'POST' && req.url === '/submit') {
-        console.log('Post detected')
         submit(req, res)
         return
     }

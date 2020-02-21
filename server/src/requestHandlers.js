@@ -2,7 +2,12 @@ const uuid = require('uuid/v1')
 
 const listOfConnections = {}
 
-const subscribe = (req, res) => {
+const connect = (req, res) => {
+    // Get tokens in request
+    const tokens = req.url.slice(1).split('/').slice(1)
+
+    console.log(tokens)
+
     // Generate an ID for client
     const clientID = uuid()
 
@@ -71,6 +76,6 @@ const submit = (req, res) => {
 }
 
 module.exports = {
-    subscribe,
+    connect,
     submit
 }
