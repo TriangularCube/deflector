@@ -3,7 +3,7 @@ const {generatePuzzleFromBoard} = require('../src/data/puzzleGenerators/v1')
 
 // console.log(generatePuzzleFromBoard(generateBoard()))
 
-const {makeNewGame, getNewestGame} = require('../src/gameManagement')
+const {makeNewGame, getNewestGame} = require('../src/game')
 
 makeNewGame().then(() => {
     getNewestGame().then(res => {
