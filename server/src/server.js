@@ -5,9 +5,9 @@ const http = require('http')
 // Fire off scheduling
 require('./schedule')
 
-const {connect, submit} = require('./requestHandlers')
+const {latest, connect, submit} = require('./requestHandlers')
 
-const server = http.createServer((req, res) => {
+const server = http.createServer(async  (req, res) => {
 
     // Allow all OPTIONS requests
     if (req.method === 'OPTIONS') {
@@ -21,11 +21,22 @@ const server = http.createServer((req, res) => {
         return
     }
 
-    // Register for all puzzle endpoints
-    if (req.method === 'GET' && req.url.includes( '/puzzle' ) ) {
-        connect(req, res)
-        return
+    if( req.method === 'GET' ){
+
+        // Register for all puzzle endpoints
+        if (req.url.startsWith( '/puzzle' ) ) {
+            connect(req, res)
+            return
+        }
+
+        // Register for getting latest
+        if (req.url.startsWith('/latest') ) {
+            latest(req, res)
+            return
+        }
+
     }
+
 
     // Register for submit
     if (req.method === 'POST' && req.url === '/submit') {
