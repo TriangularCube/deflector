@@ -1,38 +1,41 @@
 ###Notes
-
 Game representation is
 
 ```json
 {
-    "gameId": number,
-    "gameBoard": board representation,
-    "date": when the game was generated,
-    "shortestPath": computed shortest path,
-    "solutions": list of solutions by players
+    "gameId": "ID Number",
+    "gameBoard": "Board Representation",
+    "puzzle": "Puzzle Representation",
+    "date": "Date Generated",
+    "shortestPath": "The Computed Shortest Path",
+    "solutions": "The List of Solutions from All Players"
 }
 ```
 Solutions representation
  
  ```json
 {
-    "playerId": username, or some other identifier,
+    "playerId": "Some way to identify a player",
     "solution": [
         {
-            "robot": color,
-            "moves": [N, E, W, S]
+            "robot": "Colour",
+            "moves": ["N", "E", "S", "W"]
         }
     ]
 }
 ```
 
-Board representation considerations
+Serialization Considerations
 
-The board is 16 x 16, which means each coordinate could be represented by
-two hex characters. e.g. 8A would be (8, 11).  
-Walls are in between two spaces, which means it could be represented by 4
-character hex. e.g. 03A3 would be a wall between (10, 3) and (11, 3)
+Coordinate can be serialized to 1 character, using some base representation. This
+means the max board size is limited to 36 (26 chars + 10 numbers). Perhaps look
+into other characters that could be used, or a different serialization technique
+altogether.
 
-Board could then be split into three sections, first all the walls, then
-target locations, then robot starting locations.
+String output should be split into multiple sections, first the board, starting
+board size, then all the walls, then potential target locations, then all non-valid
+locations. Next the puzzle, with an actual target, and all robot locations.
 
-e.g. 03A34555AB0B-0F4E-84 
+e.g. 16-16-03A34555AB0B-0F4E-84-3A-A2B443
+
+
