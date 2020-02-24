@@ -71,22 +71,30 @@ const connect = async (req, res) => {
         'Content-Type': 'text/event-stream',
         'Cache-Control': 'no-cache',
         'Access-Control-Allow-Origin': '*',
+
+        // Turn off buffering on Nginx
+        // https://serverfault.com/questions/801628/for-server-sent-events-sse-what-nginx-proxy-configuration-is-appropriate
+        'X-Accel-Buffering': 'no',
     })
 
     // Then send current state over
     let message = `event: initial\nretry: 5000\ndata: ${JSON.stringify(game)}\n\n\n`
     res.write(message)
+    res.flush()
 
     // Ping every 20 seconds to keep connection alive
     //  There doesn't need to be an actual handler for this event
-    const pingID = setInterval(() => res.write(`event: ping\n\n\n`), 20000)
+    const heartbeatID = setInterval(() => {
+        res.write(`event: ping\n\n\n`)
+        res.flush()
+    }, 20000)
 
     req.on('close', () => {
         console.log(`Client ${clientID} has closed its connection`)
 
         // On connection close, kill the ping and remove from connection list
         delete listOfConnections[clientID]
-        clearInterval(pingID)
+        clearInterval(heartbeatID)
     })
 }
 
