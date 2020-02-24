@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState, useReducer } from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import { useLocation, useHistory } from 'react-router-dom'
 import clsx from 'clsx'
 
@@ -112,6 +112,7 @@ const GameArea = props => {
                     )}
                 />
             )}
+
             <div className={classes.spacer} />
 
             {game ? (

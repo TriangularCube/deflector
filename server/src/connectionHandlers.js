@@ -85,7 +85,7 @@ const connect = async (req, res) => {
     // Ping every 20 seconds to keep connection alive
     //  There doesn't need to be an actual handler for this event
     const heartbeatID = setInterval(() => {
-        res.write(`event: ping\n\n\n`)
+        res.write(`event: heartbeat\n\n\n`)
         res.flush()
     }, 20000)
 
