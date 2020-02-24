@@ -5,7 +5,7 @@ const http = require('http')
 // Fire off scheduling
 require('./schedule')
 
-const {latest, connect, submit} = require('./requestHandlers')
+const {latest, connect, submit} = require('./connectionHandlers')
 
 const server = http.createServer(async  (req, res) => {
 

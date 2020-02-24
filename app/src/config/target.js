@@ -5,7 +5,7 @@ const targets = {
 }
 const saved = localStorage.getItem(localStorageName)
 
-let targetName = saved ? saved : 'local'
+let targetName = saved ? saved : 'production'
 let targetUrl = saved ? targets[targetName] : targets.production
 
 export const getTargetUrl = () => {

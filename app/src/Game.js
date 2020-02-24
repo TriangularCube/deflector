@@ -1,6 +1,30 @@
 import { getTargetUrl } from './config/target'
 
-export const Draw = (canvas, context) => {
+// Define the drawing algorithm
+// const draw = timestamp => {
+//     Draw(canvas, context)
+//     animationID = requestAnimationFrame(draw)
+// }
+
+// Start drawing
+// animationID = requestAnimationFrame(draw)
+
+// Cancel animation on navigation away
+// return () => {
+// cancelAnimationFrame(animationID)
+// }
+
+export const EngageDraw = (canvas, game) => {
+    canvas.onclick = ClickHandler
+
+    const context = canvas.getContext('2d')
+
+    console.log(game)
+
+    requestAnimationFrame(() => Draw(canvas, context))
+}
+
+const Draw = (canvas, context) => {
     context.clearRect(0, 0, canvas.width, canvas.height)
 
     context.beginPath()
@@ -14,7 +38,7 @@ export const Draw = (canvas, context) => {
     context.stroke()
 }
 
-export const ClickHandler = async evt => {
+const ClickHandler = async evt => {
     console.log(evt.pageX, evt.pageY)
     console.log(evt.target.offsetLeft)
 

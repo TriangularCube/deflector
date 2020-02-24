@@ -12,12 +12,14 @@ import { NavBar } from './NavBar'
 import { Target } from './Target'
 
 const useStyles = makeStyles({
+    // TODO: Taken from Robot Reboot. Replace with something else?
     wall: {
         background:
             'linear-gradient(135deg,  #F1F3F4 22px, #FCFCFC 22px, #FCFCFC 24px, transparent 24px, transparent 67px, #FCFCFC 67px, #FCFCFC 69px, transparent 69px),\n' +
             'linear-gradient(225deg,  #F1F3F4 22px, #FCFCFC 22px, #FCFCFC 24px, transparent 24px, transparent 67px, #FCFCFC 67px, #FCFCFC 69px, transparent 69px)0 64px',
         backgroundColor: '#F1F3F4',
         backgroundSize: '64px 128px',
+        minHeight: '100vh',
     },
 })
 

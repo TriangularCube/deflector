@@ -61,7 +61,7 @@ const connect = async (req, res) => {
     const clientID = uuid()
 
     // First add connection to the list
-    listOfConnections[clientID] = res
+    listOfConnections[clientID] = { connection: res, gameType: tokens[0], gameID: tokens[1] }
 
     console.log(`Client ${clientID} has connected`)
 
@@ -74,11 +74,8 @@ const connect = async (req, res) => {
     })
 
     // Then send current state over
-    let message = `event: initial\nretry: 5000\ndata: ${JSON.stringify(null)}\n\n\n`
+    let message = `event: initial\nretry: 5000\ndata: ${JSON.stringify(game)}\n\n\n`
     res.write(message)
-
-    // DEBUG
-    const tickID = setInterval( () => res.write(`event: tick\ndata: ${Date.now()}\n\n\n`), 1000)
 
     // Ping every 20 seconds to keep connection alive
     //  There doesn't need to be an actual handler for this event
