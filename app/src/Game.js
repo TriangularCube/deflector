@@ -1,5 +1,13 @@
 import deepcopy from 'deepcopy'
 
+const pieceColors = {
+    red: '#FC5225',
+    yellow: '#F1F711',
+    green: '#25a72d',
+    blue: '#278cbb',
+    silver: '#9ea7a5',
+}
+
 let currentGame = null
 
 let currentPieces = null
@@ -99,11 +107,10 @@ const Draw = canvas => {
     // Paint pieces
     context.strokeStyle = '#000000'
     context.lineWidth = 1
-    drawPiece(context, currentGame.puzzle.pieces.red, '#FC5225', tileSize)
-    drawPiece(context, currentGame.puzzle.pieces.yellow, '#F1F711', tileSize)
-    drawPiece(context, currentGame.puzzle.pieces.green, '#25a72d', tileSize)
-    drawPiece(context, currentGame.puzzle.pieces.blue, '#278cbb', tileSize)
-    drawPiece(context, currentGame.puzzle.pieces.silver, '#9ea7a5', tileSize)
+
+    currentGame.puzzle.pieces.forEach(piece => {
+        drawPiece(context, piece, pieceColors[piece.colour], tileSize)
+    })
 }
 
 const drawPiece = (context, piece, color, tileSize) => {
@@ -111,8 +118,8 @@ const drawPiece = (context, piece, color, tileSize) => {
 
     context.beginPath()
     context.arc(
-        piece[0] * tileSize + tileSize / 2,
-        piece[1] * tileSize + tileSize / 2,
+        piece.coordinate[0] * tileSize + tileSize / 2,
+        piece.coordinate[1] * tileSize + tileSize / 2,
         tileSize / 2 - tileSize * 0.2,
         0,
         Math.PI * 2
@@ -127,13 +134,21 @@ const ClickHandler = evt => {
 
     const tileSize = evt.target.width / currentGame.board.size.x
 
-    const clickedX = (evt.pageX - evt.target.offsetLeft) / tileSize
-    const clickedY = (evt.pageY - evt.target.offsetTop) / tileSize
+    const clickedX = Math.floor((evt.pageX - evt.target.offsetLeft) / tileSize)
+    const clickedY = Math.floor((evt.pageY - evt.target.offsetTop) / tileSize)
 
+    console.log(clickedX, clickedY)
 
+    currentSelectedPiece = currentPieces.find(
+        element =>
+            element.coordinate[0] === clickedX &&
+            element.coordinate[1] === clickedY
+    )
 
-    moveList = [...moveList, { piece: 'green', direction: 'north' }]
-    setMovelistInSidebar(moveList)
+    console.log(currentSelectedPiece)
+
+    // moveList = [...moveList, { piece: 'green', direction: 'north' }]
+    // setMovelistInSidebar(moveList)
 
     // const res = await fetch(`${getTargetUrl()}/submit`, {
     //     method: 'POST',
