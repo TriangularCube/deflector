@@ -5,11 +5,11 @@ const generatePuzzleFromBoard = board => {
     puzzle.target = board.goals[Math.floor(Math.random() * board.goals.length)]
 
     puzzle.pieces = [
-        {color: 'red', coordinate: generateRandomCoordinate(board)},
-        {color: 'green', coordinate: generateRandomCoordinate(board)},
-        {color: 'blue', coordinate: generateRandomCoordinate(board)},
-        {color: 'yellow', coordinate: generateRandomCoordinate(board)},
-        {color: 'silver', coordinate: generateRandomCoordinate(board)},
+        {colour: 'red', coordinate: generateRandomCoordinate(board)},
+        {colour: 'green', coordinate: generateRandomCoordinate(board)},
+        {colour: 'blue', coordinate: generateRandomCoordinate(board)},
+        {colour: 'yellow', coordinate: generateRandomCoordinate(board)},
+        {colour: 'silver', coordinate: generateRandomCoordinate(board)},
     ]
 
     // TODO make sure generated puzzle can't be solved in less than X moves
