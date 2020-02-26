@@ -7,7 +7,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import { Skeleton } from '@material-ui/lab'
 
 import { getTargetUrl } from './config/target'
-import { EngageDraw } from './Game'
+import { SetupGame } from './Game'
 
 export const GameScreen = () => {
     const [data, setData] = useState({ loading: true })
@@ -72,6 +72,7 @@ const useStyles = makeStyles({
     sideBarSize: {
         width: 450,
         height: 720,
+        overflowY: 'auto',
     },
     backgroundColour: {
         backgroundColor: '#FFFFFF',
@@ -83,6 +84,7 @@ const GameArea = props => {
 
     const game = props.game
     const canvasRef = useRef(null)
+    const [movelist, setMovelist] = useState(null)
 
     useEffect(() => {
         if (!game) {
@@ -96,7 +98,7 @@ const GameArea = props => {
         canvas.width = 720
         canvas.height = 720
 
-        EngageDraw(canvas, game)
+        SetupGame(canvas, game, setMovelist)
     }, [game])
 
     return (
@@ -125,6 +127,18 @@ const GameArea = props => {
                     <Typography color='inherit' variant='h5'>
                         Side Bar
                     </Typography>
+                    <div>
+                        {!movelist
+                            ? 'None'
+                            : movelist.map((element, index) => (
+                                  <div key={index}>
+                                      <Typography>{element.piece}</Typography>
+                                      <Typography>
+                                          {element.direction}
+                                      </Typography>
+                                  </div>
+                              ))}
+                    </div>
                 </div>
             ) : (
                 <Skeleton
