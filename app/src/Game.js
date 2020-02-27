@@ -1,17 +1,34 @@
 import deepcopy from 'deepcopy'
 
 const pieceColors = {
-    red: '#FC5225',
-    yellow: '#F1F711',
-    green: '#25a72d',
-    blue: '#278cbb',
-    silver: '#9ea7a5',
+    red: {
+        robot: '#FC5225',
+        highlight: '#fc844e',
+    },
+    yellow: {
+        robot: '#F1F711',
+        highlight: '#cecb67',
+    },
+    green: {
+        robot: '#25a72d',
+        highlight: '#6ca766',
+    },
+    blue: {
+        robot: '#278cbb',
+        highlight: '#72a3bb',
+    },
+    silver: {
+        robot: '#9ea7a5',
+        highlight: '#707977',
+    },
 }
 
+let currentCanvas = null
 let currentGame = null
 
 let currentPieces = null
 let currentSelectedPiece = null
+let currentPossibleMoves = null
 
 let moveList = []
 let setMovelistInSidebar = null
@@ -23,23 +40,28 @@ export const SetupGame = (canvas, game, setMovelist) => {
 
     console.log(game)
 
+    currentCanvas = canvas
     currentGame = game
     currentPieces = deepcopy(game.puzzle.pieces)
 
     requestAnimationFrame(() => Draw(canvas))
 }
 
-const Draw = canvas => {
-    const context = canvas.getContext('2d')
+const Draw = () => {
+    if (!currentCanvas) {
+        return
+    }
+
+    const context = currentCanvas.getContext('2d')
 
     // TODO: If there is no game
 
     // Clear the Rect
-    context.clearRect(0, 0, canvas.width, canvas.height)
+    context.clearRect(0, 0, currentCanvas.width, currentCanvas.height)
 
     // Find the Tile Sizes
     // TODO: Find tile size without resorting to only using width
-    const tileSize = canvas.width / currentGame.board.size.x
+    const tileSize = currentCanvas.width / currentGame.board.size.x
 
     // Set Stroke and Fill styles for board
     context.strokeStyle = '#A4A4A3'
@@ -52,6 +74,7 @@ const Draw = canvas => {
             context.fillStyle = '#F4DCBF'
             context.fillRect(x * tileSize, y * tileSize, tileSize, tileSize)
 
+            // TODO: Paint interior
             // context.fillStyle = '#ffffff'
             // context.fillRect(
             //     x * tileSize + tileSize * 0.2,
@@ -65,10 +88,23 @@ const Draw = canvas => {
         }
     }
 
+    // Paint selection and moves (below walls)
+    if (currentSelectedPiece) {
+        context.fillStyle = pieceColors[currentSelectedPiece.colour].highlight
+        context.fillRect(
+            currentSelectedPiece.coordinate[0] * tileSize + 1,
+            currentSelectedPiece.coordinate[1] * tileSize + 1,
+            tileSize - 2,
+            tileSize - 2
+        )
+
+        // TODO: All possible moves for this piece
+    }
+
     // Paint the outside walls
     context.strokeStyle = '#000000'
     context.lineWidth = 5
-    context.strokeRect(0, 0, canvas.width, canvas.height)
+    context.strokeRect(0, 0, currentCanvas.width, currentCanvas.height)
 
     // Paint all invalid tiles
     context.fillStyle = '#000000'
@@ -104,12 +140,14 @@ const Draw = canvas => {
         context.stroke()
     })
 
+
+
     // Paint pieces
     context.strokeStyle = '#000000'
     context.lineWidth = 1
 
     currentGame.puzzle.pieces.forEach(piece => {
-        drawPiece(context, piece, pieceColors[piece.colour], tileSize)
+        drawPiece(context, piece, pieceColors[piece.colour].robot, tileSize)
     })
 }
 
@@ -129,9 +167,6 @@ const drawPiece = (context, piece, color, tileSize) => {
 }
 
 const ClickHandler = evt => {
-    console.log(evt.pageX, evt.pageY)
-    console.log(evt.target.offsetLeft)
-
     const tileSize = evt.target.width / currentGame.board.size.x
 
     const clickedX = Math.floor((evt.pageX - evt.target.offsetLeft) / tileSize)
@@ -144,6 +179,8 @@ const ClickHandler = evt => {
             element.coordinate[0] === clickedX &&
             element.coordinate[1] === clickedY
     )
+
+    requestAnimationFrame(Draw)
 
     console.log(currentSelectedPiece)
 
