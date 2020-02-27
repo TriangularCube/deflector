@@ -29,7 +29,7 @@ const quads = {
                     [0,4],
                     [0,5]
                 ],
-                //Red Target
+                // Red Target
                 [
                     [2,1],
                     [3,1]
@@ -37,24 +37,64 @@ const quads = {
                 [
                     [2,1],
                     [2,2]
+                ],
+                // Green Target
+                [
+                    [1,3],
+                    [1,4]
+                ],
+                [
+                    [1,3],
+                    [0,3]
+                ],
+                // Yellow Target
+                [
+                    [6,4],
+                    [6,3]
+                ],
+                [
+                    [6,4],
+                    [5,4]
+                ],
+                // Blue Target
+                [
+                    [5,6],
+                    [5,5]
+                ],
+                [
+                    [5,6],
+                    [6,6]
+                ],
+                // Special Target
+                [
+                    [3,7],
+                    [3,8]
+                ],
+                [
+                    [3,7],
+                    [4,7]
                 ]
             ],
             goals: [
                 {
-                    coordinate: [4, 1],
-                    colour: 'r'
+                    coordinate: [2, 1],
+                    colour: 'red'
                 },
                 {
-                    coordinate: [1,2],
-                    colour: 'g'
+                    coordinate: [1,3],
+                    colour: 'green'
                 },
                 {
-                    coordinate: [6,3],
-                    colour: 'y'
+                    coordinate: [6,4],
+                    colour: 'yellow'
                 },
                 {
-                    coordinate: [3,6],
-                    colour: 'b'
+                    coordinate: [5,6],
+                    colour: 'blue'
+                },
+                {
+                    coordinate: [3, 7],
+                    colour: 'any'
                 }
             ],
             notValid: [[7, 7]],
@@ -119,67 +159,73 @@ const quads = {
             notValid: [[7, 7]],
         },
     ],
+    // B is Blue Board
     B: [
         {
             id: '1B',
             walls: [
+                // Side Walls
                 [
-                    [4, 0],
-                    [5, 0],
+                    [4,0],
+                    [5,0]
                 ],
                 [
-                    [6, 1],
-                    [7, 1],
+                    [0,4],
+                    [0,5]
+                ],
+                // Yellow Target
+                [
+                    [2,1],
+                    [2,0]
                 ],
                 [
-                    [6, 1],
-                    [6, 2],
+                    [1,1],
+                    [2,1]
+                ],
+                // Green Target
+                [
+                    [1,6],
+                    [1,7]
                 ],
                 [
-                    [1, 1],
-                    [1, 2],
+                    [1,6],
+                    [2,6]
+                ],
+                // Red Target
+                [
+                    [4,5],
+                    [5,5]
                 ],
                 [
-                    [0, 2],
-                    [1, 2],
+                    [4,4],
+                    [4,5]
+                ],
+                // Blue Target
+                [
+                    [6,3],
+                    [6,4]
                 ],
                 [
-                    [0, 5],
-                    [0, 6],
-                ],
-                [
-                    [6, 4],
-                    [6, 5],
-                ],
-                [
-                    [6, 5],
-                    [7, 5],
-                ],
-                [
-                    [3, 6],
-                    [3, 7],
-                ],
-                [
-                    [2, 6],
-                    [3, 6],
-                ],
+                    [5,3],
+                    [6,3]
+                ]
             ],
             goals: [
                 {
-                    coordinate:[6,1],
-                    colour:'y'
+                    coordinate:[2,1],
+                    colour:'yellow'
                 },
                 {
-                    coordinate:[1,2],
-                    colour:'g'
+                    coordinate:[1,6],
+                    colour:'green'
                 },
                 {
-                    coordinate:[6,5],
-                    colour:'b'
+                    coordinate:[6,3],
+                    colour:'blue'
                 },
                 {
-                    coordinate:[3,6],
-                    colour:'r'
+                    coordinate:[4,5],
+                    colour:'red'
                 }
             ],
             notValid: [[7, 7]],
