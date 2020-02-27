@@ -56,11 +56,11 @@ export const GameScreen = () => {
 
 const useStyles = makeStyles({
     container: {
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'center',
-
+        display: 'grid',
         paddingTop: 30,
+    },
+    canvasPosition: {
+        gridColumn: 1,
     },
     spacer: {
         width: 20,
@@ -73,6 +73,10 @@ const useStyles = makeStyles({
         width: 450,
         height: 720,
         overflowY: 'auto',
+    },
+    sideBarPosition: {
+        gridColumn: 2,
+        gridRow: 1,
     },
     backgroundColour: {
         backgroundColor: '#FFFFFF',
@@ -104,7 +108,7 @@ const GameArea = props => {
     return (
         <Container maxWidth='lg' className={classes.container}>
             {game ? (
-                <canvas ref={canvasRef} />
+                <canvas ref={canvasRef} className={classes.canvasPosition} />
             ) : (
                 <Skeleton
                     variant='rect'
@@ -121,7 +125,8 @@ const GameArea = props => {
                 <div
                     className={clsx(
                         classes.sideBarSize,
-                        classes.backgroundColour
+                        classes.backgroundColour,
+                        classes.sideBarPosition
                     )}
                 >
                     <Typography color='inherit' variant='h5'>
