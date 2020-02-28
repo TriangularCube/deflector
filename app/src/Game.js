@@ -128,8 +128,8 @@ const Draw = () => {
                 ? wall[0]
                 : wall[1]
             : wall[0][0] > wall[1][0]
-            ? wall[1]
-            : wall[0]
+            ? wall[0]
+            : wall[1]
 
         context.beginPath()
         context.moveTo(referenceTile[0] * tileSize, referenceTile[1] * tileSize)
