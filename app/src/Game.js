@@ -28,7 +28,7 @@ let currentGame = null
 
 let currentPieces = null
 let currentSelectedPiece = null
-let currentPossibleMoves = null
+let currentPossibleMoves = { north: [], east: [], south: [], west: [] }
 
 let moveList = []
 let setMovelistInSidebar = null
@@ -99,6 +99,16 @@ const Draw = () => {
         )
 
         // TODO: All possible moves for this piece
+        for (const direction of Object.values(currentPossibleMoves)) {
+            direction.forEach(tile => {
+                context.fillRect(
+                    tile[0] * tileSize + 1,
+                    tile[1] * tileSize + 1,
+                    tileSize - 2,
+                    tileSize - 2
+                )
+            })
+        }
     }
 
     // Paint the outside walls
@@ -140,8 +150,6 @@ const Draw = () => {
         context.stroke()
     })
 
-
-
     // Paint pieces
     context.strokeStyle = '#000000'
     context.lineWidth = 1
@@ -172,42 +180,106 @@ const ClickHandler = evt => {
     const clickedX = Math.floor((evt.pageX - evt.target.offsetLeft) / tileSize)
     const clickedY = Math.floor((evt.pageY - evt.target.offsetTop) / tileSize)
 
-    console.log(clickedX, clickedY)
+    // If clicked area is in possible moves
+    // TODO: Move Piece
 
+    // Otherwise find if clicked on piece
     currentSelectedPiece = currentPieces.find(
         element =>
             element.coordinate[0] === clickedX &&
             element.coordinate[1] === clickedY
     )
 
+    // Clear previous possible moves
+    Object.keys(currentPossibleMoves).forEach(
+        direction => (currentPossibleMoves[direction] = [])
+    )
+
+    calculatePossibleMoves()
+
     requestAnimationFrame(Draw)
-
-    console.log(currentSelectedPiece)
-
-    // moveList = [...moveList, { piece: 'green', direction: 'north' }]
-    // setMovelistInSidebar(moveList)
-
-    // const res = await fetch(`${getTargetUrl()}/submit`, {
-    //     method: 'POST',
-    //     mode: 'cors',
-    //     headers: {
-    //         'Content-Type': 'application/json',
-    //     },
-    //     body: JSON.stringify(['Data!']),
-    // })
-    // console.log(await res.text())
 }
 
-// Define the drawing algorithm
-// const draw = timestamp => {
-//     Draw(canvas, context)
-//     animationID = requestAnimationFrame(draw)
-// }
+const calculatePossibleMoves = () => {
+    // Calculate all possible moves
+    if (!currentSelectedPiece) {
+        return
+    }
 
-// Start drawing
-// animationID = requestAnimationFrame(draw)
+    let currentNode = currentSelectedPiece.coordinate
+    let currentDirection = null
 
-// Cancel animation on navigation away
-// return () => {
-// cancelAnimationFrame(animationID)
-// }
+    // East
+    currentDirection = 'east'
+    do {
+        const nextNode = getNextNode(currentNode, currentDirection)
+    } while (currentNode)
+
+    // for (
+    //     let i = currentSelectedPiece.coordinate[0];
+    //     i < currentGame.board.size.x;
+    //     i++
+    // ) {
+    //     // East
+    //
+    //     const current = [i, currentSelectedPiece.coordinate[1]]
+    //     const next = [i + 1, currentSelectedPiece.coordinate[1]]
+    //
+    //     currentPossibleMoves.east.push(current)
+    //
+    //     if (isBlocked(current, next)) {
+    //         break
+    //     }
+    // }
+}
+
+const getNextNode = (currentNode, direction) => {
+    const nextNode = deepcopy(currentNode)
+
+    switch (direction) {
+        case 'east':
+            nextNode[0] += 1
+            break
+        case 'west':
+            nextNode[0] -= 1
+            break
+        case 'north':
+            nextNode[1] -= 1
+            break
+        case 'south':
+            nextNode[1] += 1
+            break
+    }
+
+    if (
+        nextNode[0] >= currentGame.board.size.x ||
+        nextNode[0] < 0 ||
+        nextNode[1] >= currentGame.board.size.y ||
+        nextNode[1] < 0
+    ) {
+        return null
+    }
+    
+    return nextNode
+}
+
+const isBlocked = (current, next) => {
+    const filtered = currentGame.board.walls.filter(wall => {
+        const wall1 = wall[0]
+        const wall2 = wall[1]
+
+        return (
+            wall1[0] === current[0] &&
+            wall1[1] === current[1] &&
+            wall2[0] === next[0] &&
+            wall2[1] === next[1]
+        )
+    })
+
+    if (filtered.length !== 0) {
+        return true
+    }
+
+    // TODO: calculate if NEXT is blocked space or is occupied by another piece
+    return false
+}
