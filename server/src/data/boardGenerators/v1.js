@@ -12,7 +12,7 @@
 const shuffle = require('shuffle-array')
 const deepcopy = require('deepcopy')
 
-const {serializeGameBoard} = require('../serializer')
+const {normalize} = require('../utils/wallNormalizer')
 
 const quads = {
     // A is Yellow Board
@@ -404,6 +404,11 @@ const generateBoard = () => {
     quadrants.forEach( quadrant => {
         newWalls.push(...quadrant.walls)
     })
+    // Normalize All Wall Coordinates
+    newWalls.forEach( (wall, index) => {
+        newWalls[index] = normalize((wall))
+    })
+
     newBoard.walls = newWalls
 
     const newGoals = []
@@ -417,8 +422,6 @@ const generateBoard = () => {
         newNotValid.push(...quadrant.notValid)
     })
     newBoard.notValid = newNotValid
-
-    // TODO: Generate an actual puzzle
 
     return newBoard
 
