@@ -28,7 +28,7 @@ let currentGame = null
 
 let currentPieces = null
 let currentSelectedPiece = null
-let currentPossibleMoves = { north: [], east: [], south: [], west: [] }
+const currentPossibleMoves = { north: [], east: [], south: [], west: [] }
 
 let moveList = []
 let setMovelistInSidebar = null
@@ -36,6 +36,7 @@ let setMovelistInSidebar = null
 export const SetupGame = (canvas, game, setMovelist) => {
     canvas.onclick = ClickHandler
 
+    moveList = []
     setMovelistInSidebar = setMovelist
 
     console.log(game)
@@ -43,6 +44,11 @@ export const SetupGame = (canvas, game, setMovelist) => {
     currentCanvas = canvas
     currentGame = game
     currentPieces = deepcopy(game.puzzle.pieces)
+
+    currentSelectedPiece = null
+    Object.keys(currentPossibleMoves).forEach(
+        direction => (currentPossibleMoves[direction] = [])
+    )
 
     requestAnimationFrame(() => Draw(canvas))
 }
@@ -154,12 +160,12 @@ const Draw = () => {
     context.strokeStyle = '#000000'
     context.lineWidth = 1
 
-    currentGame.puzzle.pieces.forEach(piece => {
-        drawPiece(context, piece, pieceColors[piece.colour].robot, tileSize)
+    currentPieces.forEach(piece => {
+        DrawPiece(context, piece, pieceColors[piece.colour].robot, tileSize)
     })
 }
 
-const drawPiece = (context, piece, color, tileSize) => {
+const DrawPiece = (context, piece, color, tileSize) => {
     context.fillStyle = color
 
     context.beginPath()
@@ -181,14 +187,29 @@ const ClickHandler = evt => {
     const clickedY = Math.floor((evt.pageY - evt.target.offsetTop) / tileSize)
 
     // If clicked area is in possible moves
-    // TODO: Move Piece
+    let clickedOnMove = null
+    for (const direction of Object.keys(currentPossibleMoves)) {
+        const filter = currentPossibleMoves[direction].filter(
+            possibleMove =>
+                possibleMove[0] === clickedX && possibleMove[1] === clickedY
+        )
+        if (filter.length > 0) {
+            clickedOnMove = true
 
-    // Otherwise find if clicked on piece
-    currentSelectedPiece = currentPieces.find(
-        element =>
-            element.coordinate[0] === clickedX &&
-            element.coordinate[1] === clickedY
-    )
+            // Move piece
+            const line = currentPossibleMoves[direction]
+            currentSelectedPiece.coordinate = line[line.length - 1]
+        }
+    }
+
+    if (!clickedOnMove) {
+        // Otherwise find if clicked on piece
+        currentSelectedPiece = currentPieces.find(
+            element =>
+                element.coordinate[0] === clickedX &&
+                element.coordinate[1] === clickedY
+        )
+    }
 
     // Clear previous possible moves
     Object.keys(currentPossibleMoves).forEach(
@@ -206,31 +227,22 @@ const calculatePossibleMoves = () => {
         return
     }
 
-    let currentNode = currentSelectedPiece.coordinate
-    let currentDirection = null
+    // Iterate through all 4 directions
+    for (const originalDirection of Object.keys(currentPossibleMoves)) {
+        // Keeping this variable for future implementation of Mirror Walls
+        let currentDirection = originalDirection
+        let currentNode = currentSelectedPiece.coordinate
 
-    // East
-    currentDirection = 'east'
-    do {
-        const nextNode = getNextNode(currentNode, currentDirection)
-    } while (currentNode)
+        do {
+            const nextNode = getNextNode(currentNode, currentDirection)
 
-    // for (
-    //     let i = currentSelectedPiece.coordinate[0];
-    //     i < currentGame.board.size.x;
-    //     i++
-    // ) {
-    //     // East
-    //
-    //     const current = [i, currentSelectedPiece.coordinate[1]]
-    //     const next = [i + 1, currentSelectedPiece.coordinate[1]]
-    //
-    //     currentPossibleMoves.east.push(current)
-    //
-    //     if (isBlocked(current, next)) {
-    //         break
-    //     }
-    // }
+            if (nextNode) {
+                currentPossibleMoves[originalDirection].push(nextNode)
+            }
+
+            currentNode = nextNode
+        } while (currentNode)
+    }
 }
 
 const getNextNode = (currentNode, direction) => {
@@ -251,6 +263,7 @@ const getNextNode = (currentNode, direction) => {
             break
     }
 
+    // Edge of Board
     if (
         nextNode[0] >= currentGame.board.size.x ||
         nextNode[0] < 0 ||
@@ -259,24 +272,49 @@ const getNextNode = (currentNode, direction) => {
     ) {
         return null
     }
-    
-    return nextNode
+
+    return isBlocked(currentNode, nextNode) ? null : nextNode
 }
 
 const isBlocked = (current, next) => {
-    const filtered = currentGame.board.walls.filter(wall => {
+    // Check for Non-Valid tiles
+    const filterNotValid = currentGame.board.notValid.filter(
+        deadTile => next[0] === deadTile[0] && next[1] === deadTile[1]
+    )
+    if (filterNotValid.length > 0) {
+        return true
+    }
+
+    // Check for other pieces
+    const filterPieces = currentPieces.filter(
+        piece =>
+            piece.colour !== currentSelectedPiece.colour &&
+            piece.coordinate[0] === next[0] &&
+            piece.coordinate[1] === next[1]
+    )
+    if (filterPieces.length > 0) {
+        return true
+    }
+
+    // Check for Walls
+    const filterWalls = currentGame.board.walls.filter(wall => {
         const wall1 = wall[0]
         const wall2 = wall[1]
 
+        // No guarantee of direction, so have to test both
         return (
-            wall1[0] === current[0] &&
-            wall1[1] === current[1] &&
-            wall2[0] === next[0] &&
-            wall2[1] === next[1]
+            (wall1[0] === current[0] &&
+                wall1[1] === current[1] &&
+                wall2[0] === next[0] &&
+                wall2[1] === next[1]) ||
+            (wall1[0] === next[0] &&
+                wall1[1] === next[1] &&
+                wall2[0] === current[0] &&
+                wall2[1] === current[1])
         )
     })
 
-    if (filtered.length !== 0) {
+    if (filterWalls.length !== 0) {
         return true
     }
 
