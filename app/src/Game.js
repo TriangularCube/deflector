@@ -33,6 +33,8 @@ const currentPossibleMoves = { north: [], east: [], south: [], west: [] }
 let moveList = []
 let setMovelistInSidebar = null
 
+let gameComplete = false
+
 export const SetupGame = (canvas, game, setMovelist) => {
     canvas.onclick = ClickHandler
 
@@ -94,26 +96,90 @@ const Draw = () => {
         }
     }
 
-    // Paint selection and moves (below walls)
-    if (currentSelectedPiece) {
-        context.fillStyle = pieceColors[currentSelectedPiece.colour].highlight
-        context.fillRect(
-            currentSelectedPiece.coordinate[0] * tileSize + 1,
-            currentSelectedPiece.coordinate[1] * tileSize + 1,
-            tileSize - 2,
-            tileSize - 2
-        )
+    if (!gameComplete) {
+        // Paint selection and moves (below walls)
+        if (currentSelectedPiece) {
+            context.fillStyle =
+                pieceColors[currentSelectedPiece.colour].highlight
+            context.fillRect(
+                currentSelectedPiece.coordinate[0] * tileSize + 1,
+                currentSelectedPiece.coordinate[1] * tileSize + 1,
+                tileSize - 2,
+                tileSize - 2
+            )
 
-        // TODO: All possible moves for this piece
-        for (const direction of Object.values(currentPossibleMoves)) {
-            direction.forEach(tile => {
-                context.fillRect(
-                    tile[0] * tileSize + 1,
-                    tile[1] * tileSize + 1,
-                    tileSize - 2,
-                    tileSize - 2
+            // TODO: All possible moves for this piece
+            for (const direction of Object.values(currentPossibleMoves)) {
+                direction.forEach(tile => {
+                    context.fillRect(
+                        tile[0] * tileSize + 1,
+                        tile[1] * tileSize + 1,
+                        tileSize - 2,
+                        tileSize - 2
+                    )
+                })
+            }
+        }
+
+        // Paint Target
+        const createTargetGradient = () => {
+            const gradient = context.createRadialGradient(
+                currentGame.puzzle.target.coordinate[0] * tileSize +
+                    tileSize / 2,
+                currentGame.puzzle.target.coordinate[1] * tileSize +
+                    tileSize / 2,
+                2,
+                currentGame.puzzle.target.coordinate[0] * tileSize +
+                    tileSize / 2,
+                currentGame.puzzle.target.coordinate[1] * tileSize +
+                    tileSize / 2,
+                tileSize / 2 - 4
+            )
+
+            if (currentGame.puzzle.target.colour === 'any') {
+                gradient.addColorStop(0, '#FFF')
+                gradient.addColorStop(1, '#000')
+            } else {
+                gradient.addColorStop(0, '#FFF')
+                gradient.addColorStop(
+                    1,
+                    pieceColors[currentGame.puzzle.target.colour].robot
                 )
-            })
+            }
+
+            return gradient
+        }
+
+        {
+            const targetX = currentGame.puzzle.target.coordinate[0]
+            const targetY = currentGame.puzzle.target.coordinate[1]
+
+            context.beginPath()
+            context.moveTo(
+                targetX * tileSize + tileSize / 2,
+                targetY * tileSize + 4
+            )
+
+            context.lineTo(
+                targetX * tileSize + tileSize - 4,
+                targetY * tileSize + tileSize / 2
+            )
+            context.lineTo(
+                targetX * tileSize + tileSize / 2,
+                targetY * tileSize + tileSize - 4
+            )
+            context.lineTo(
+                targetX * tileSize + 4,
+                targetY * tileSize + tileSize / 2
+            )
+            context.closePath()
+
+            // context.strokeStyle = '#FFF'
+            // context.lineWidth = 3
+            // context.stroke()
+
+            context.fillStyle = createTargetGradient()
+            context.fill()
         }
     }
 
@@ -157,27 +223,27 @@ const Draw = () => {
     })
 
     // Paint pieces
+
+    const DrawPiece = (piece, color) => {
+        context.fillStyle = color
+
+        context.beginPath()
+        context.arc(
+            piece.coordinate[0] * tileSize + tileSize / 2,
+            piece.coordinate[1] * tileSize + tileSize / 2,
+            tileSize / 2 - tileSize * 0.2,
+            0,
+            Math.PI * 2
+        )
+        context.fill()
+        context.stroke()
+    }
     context.strokeStyle = '#000000'
     context.lineWidth = 1
 
     currentPieces.forEach(piece => {
-        DrawPiece(context, piece, pieceColors[piece.colour].robot, tileSize)
+        DrawPiece(piece, pieceColors[piece.colour].robot)
     })
-}
-
-const DrawPiece = (context, piece, color, tileSize) => {
-    context.fillStyle = color
-
-    context.beginPath()
-    context.arc(
-        piece.coordinate[0] * tileSize + tileSize / 2,
-        piece.coordinate[1] * tileSize + tileSize / 2,
-        tileSize / 2 - tileSize * 0.2,
-        0,
-        Math.PI * 2
-    )
-    context.fill()
-    context.stroke()
 }
 
 const ClickHandler = evt => {
@@ -199,6 +265,21 @@ const ClickHandler = evt => {
             // Move piece
             const line = currentPossibleMoves[direction]
             currentSelectedPiece.coordinate = line[line.length - 1]
+
+            moveList.push({ piece: currentSelectedPiece.colour, direction })
+            setMovelistInSidebar([...moveList])
+
+            if (
+                currentSelectedPiece.colour ===
+                    currentGame.puzzle.target.colour &&
+                currentSelectedPiece.coordinate[0] ===
+                    currentGame.puzzle.target.coordinate[0] &&
+                currentSelectedPiece.coordinate[1] ===
+                    currentGame.puzzle.target.coordinate[1]
+            ) {
+                // Yup, hit our target
+                gameComplete = true
+            }
         }
     }
 
@@ -230,7 +311,7 @@ const calculatePossibleMoves = () => {
     // Iterate through all 4 directions
     for (const originalDirection of Object.keys(currentPossibleMoves)) {
         // Keeping this variable for future implementation of Mirror Walls
-        let currentDirection = originalDirection
+        const currentDirection = originalDirection
         let currentNode = currentSelectedPiece.coordinate
 
         do {
@@ -318,6 +399,5 @@ const isBlocked = (current, next) => {
         return true
     }
 
-    // TODO: calculate if NEXT is blocked space or is occupied by another piece
     return false
 }
