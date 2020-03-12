@@ -36,6 +36,9 @@ let setMovelistInSidebar = null
 let gameComplete = false
 
 export const SetupGame = (canvas, game, setMovelist) => {
+
+    resetGame()
+
     canvas.onclick = ClickHandler
 
     moveList = []
@@ -47,12 +50,23 @@ export const SetupGame = (canvas, game, setMovelist) => {
     currentGame = game
     currentPieces = deepcopy(game.puzzle.pieces)
 
+    requestAnimationFrame(() => Draw(canvas))
+}
+
+const resetGame = () => {
+    moveList = []
+    setMovelistInSidebar = null
+
+    currentCanvas = null
+    currentGame = null
+    currentPieces = null
+
     currentSelectedPiece = null
     Object.keys(currentPossibleMoves).forEach(
         direction => (currentPossibleMoves[direction] = [])
     )
 
-    requestAnimationFrame(() => Draw(canvas))
+    gameComplete = false
 }
 
 const Draw = () => {
