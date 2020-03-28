@@ -36,7 +36,6 @@ let setMovelistInSidebar = null
 let gameComplete = false
 
 export const SetupGame = (canvas, game, setMovelist) => {
-
     resetGame()
 
     canvas.onclick = ClickHandler
