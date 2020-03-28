@@ -1,4 +1,4 @@
-const {generateBoard} = require('../src/data/boardGenerators/v1/v1')
+const {generateBoard} = require('../src/data/boardGenerators/v1/creator.js')
 const {generatePuzzleFromBoard} = require('../src/data/puzzleGenerators/v1')
 
 // console.log(generatePuzzleFromBoard(generateBoard()))

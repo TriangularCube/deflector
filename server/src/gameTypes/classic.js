@@ -1,15 +1,14 @@
-const {getDB} = require('./dbInterface')
+const { getDB } = require('./dbInterface')
 const db = getDB('classic')
-
-const { generateBoard } = require('../data/boardGenerators/v1/v1')
-const { generatePuzzleFromBoard } = require('../data/puzzleGenerators/v1')
+const { generateBoard } = require('../data/boardGenerators/v1/creator.js')
+const { generatePuzzleFromBoard } = require('../data/puzzleGenerators/v1.js')
 
 const getNewestId = async () => {
     return await db.getHighestId()
 }
 
-const getGame = async (id) => {
-    return await db.asyncFindOne({_id:id})
+const getGame = async id => {
+    return await db.asyncFindOne({ _id: id })
 }
 
 const makeNewGame = async () => {
@@ -21,19 +20,19 @@ const makeNewGame = async () => {
         _id: id,
         time: Date.now(),
         board: newBoard,
-        puzzle: generatePuzzleFromBoard(newBoard)
+        puzzle: generatePuzzleFromBoard(newBoard),
     })
 }
 
 module.exports = {
     makeNewGame,
     getNewestId,
-    getGame
+    getGame,
 }
 
 // Make sure to seed the DB with at least one game
 getNewestId().then(res => {
-    if( !res ){
+    if (!res) {
         makeNewGame()
     }
 })

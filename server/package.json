@@ -1,7 +1,6 @@
 {
     "name": "deflector-server",
     "version": "0.0.1",
-    "type": "module",
     "description": "Server side logic for Deflector",
     "main": "index.js",
     "scripts": {

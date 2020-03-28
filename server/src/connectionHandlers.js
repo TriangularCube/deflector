@@ -1,9 +1,9 @@
-const {v4: uuid} = require('uuid/v1')
+const { v1: uuid } = require('uuid')
 
 const listOfConnections = {}
 
 const gameTypes = {
-    classic: require('./gameTypes/classic')
+    classic: require('./gameTypes/classic'),
 }
 
 const latest = async (req, res) => {
@@ -12,13 +12,13 @@ const latest = async (req, res) => {
 
     // Get Game Type
     const type = gameTypes[tokens[0]]
-    if( !type ){
+    if (!type) {
         badRequest(res, 'No such game type')
         return
     }
 
     const latest = await type.getNewestId()
-    if( !latest ){
+    if (!latest) {
         res.writeHead(500, {
             'Access-Control-Allow-Origin': '*',
         })
@@ -29,7 +29,7 @@ const latest = async (req, res) => {
     // Return a 200 OKAY message
     res.writeHead(200, {
         'Access-Control-Allow-Origin': '*',
-        'Content-Type': 'text/plain'
+        'Content-Type': 'text/plain',
     })
     res.end(latest.toString())
 }
@@ -40,19 +40,19 @@ const connect = async (req, res) => {
 
     // Get Game Type
     const type = gameTypes[tokens[0]]
-    if( !type ){
+    if (!type) {
         badRequest(res, 'No such game type')
         return
     }
 
     // Get the game
-    const gameID = parseInt( tokens[1] )
-    if( !gameID ){
+    const gameID = parseInt(tokens[1])
+    if (!gameID) {
         badRequest(res, `ID can't be parsed`)
         return
     }
     const game = await type.getGame(gameID)
-    if( !game ){
+    if (!game) {
         badRequest(res, 'No such game ID')
         return
     }
@@ -61,13 +61,17 @@ const connect = async (req, res) => {
     const clientID = uuid()
 
     // First add connection to the list
-    listOfConnections[clientID] = { connection: res, gameType: tokens[0], gameID: tokens[1] }
+    listOfConnections[clientID] = {
+        connection: res,
+        gameType: tokens[0],
+        gameID: tokens[1],
+    }
 
     console.log(`Client ${clientID} has connected`)
 
     // Headers necessary to use SSE
     res.writeHead(200, {
-        'Connection': 'keep-alive',
+        Connection: 'keep-alive',
         'Content-Type': 'text/event-stream',
         'Cache-Control': 'no-cache',
         'Access-Control-Allow-Origin': '*',
@@ -78,7 +82,9 @@ const connect = async (req, res) => {
     })
 
     // Then send current state over
-    let message = `event: initial\nretry: 5000\ndata: ${JSON.stringify(game)}\n\n\n`
+    const message = `event: initial\nretry: 5000\ndata: ${JSON.stringify(
+        game
+    )}\n\n\n`
     res.write(message)
     res.flush()
 
@@ -129,12 +135,12 @@ const submit = (req, res) => {
 module.exports = {
     latest,
     connect,
-    submit
+    submit,
 }
 
 const badRequest = (res, message) => {
-    res.writeHead( 400, {
-        'Access-Control-Allow-Origin': '*'
+    res.writeHead(400, {
+        'Access-Control-Allow-Origin': '*',
     })
     res.end(message)
 }

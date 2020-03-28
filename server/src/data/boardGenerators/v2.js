@@ -1,11 +1,11 @@
 // NOTE: Coordinates are 0 base index
 
 /*
-* Quadrant 1 is top left
-* Quadrant 2 is top right
-* Quadrant 3 is bottom left
-* Quadrant 4 is bottom right
-*/
+ * Quadrant 1 is top left
+ * Quadrant 2 is top right
+ * Quadrant 3 is bottom left
+ * Quadrant 4 is bottom right
+ */
 
 const mapToQuadrant = (quad, location) => {
     return [
@@ -25,7 +25,7 @@ const generate = () => {
     const walls = []
 
     // For each quadrant
-    for(const quad in [1, 2, 3, 4]){
+    for (const quad in [1, 2, 3, 4]) {
         // Generate X wall
         let randomWallSide1 = Math.floor(Math.random() * (5 - 2) + 2)
         let randomWallSide2 = randomWallSide1 + 1

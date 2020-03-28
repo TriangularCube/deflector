@@ -1,14 +1,14 @@
 const schedule = require('node-schedule')
 
-let rule = new schedule.RecurrenceRule()
+const rule = new schedule.RecurrenceRule()
 
 rule.hour = new schedule.Range(0, 23)
 rule.minute = 0
 
 // Classic games
-const { makeNewGame } = require('./gameTypes/classic')
+const { makeNewGame } = require('./gameTypes/classic.js')
 
-let job = schedule.scheduleJob( rule, () => {
+/*let job =*/ schedule.scheduleJob(rule, () => {
     makeNewGame()
     // TODO broadcast change
 })
