@@ -1,7 +1,7 @@
 const {getDB} = require('./dbInterface')
 const db = getDB('classic')
 
-const { generateBoard } = require('../data/boardGenerators/v1')
+const { generateBoard } = require('../data/boardGenerators/v1/v1')
 const { generatePuzzleFromBoard } = require('../data/puzzleGenerators/v1')
 
 const getNewestId = async () => {

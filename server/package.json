@@ -1,24 +1,26 @@
 {
-  "name": "deflector-server",
-  "version": "0.0.1",
-  "description": "Server side logic for Deflector",
-  "main": "index.js",
-  "scripts": {
-    "test": "node test/tests.js",
-    "start": "nodemon src/server.js",
-    "deploy": "npm i && pm2 start --env production"
-  },
-  "keywords": [],
-  "author": "Michael Liu",
-  "license": "MIT",
-  "dependencies": {
-    "deepcopy": "^2.0.0",
-    "nedb-async": "^0.1.3",
-    "node-schedule": "^1.3.2",
-    "shuffle-array": "^1.0.1",
-    "uuid": "^3.4.0"
-  },
-  "devDependencies": {
-    "nodemon": "^2.0.2"
-  }
+    "name": "deflector-server",
+    "version": "0.0.1",
+    "type": "module",
+    "description": "Server side logic for Deflector",
+    "main": "index.js",
+    "scripts": {
+        "test": "node test/tests.js",
+        "start": "nodemon src/server.js",
+        "deploy": "npm i && pm2 start --env production"
+    },
+    "keywords": [],
+    "author": "Michael Liu",
+    "license": "MIT",
+    "dependencies": {
+        "deepcopy": "^2.0.0",
+        "nedb-async": "^0.1.3",
+        "node-schedule": "^1.3.2",
+        "shuffle-array": "^1.0.1",
+        "uuid": "^7.0.2"
+    },
+    "devDependencies": {
+        "nodemon": "^2.0.2",
+        "prettier": "^2.0.2"
+    }
 }
