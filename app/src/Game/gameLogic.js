@@ -1,27 +1,11 @@
 import deepcopy from 'deepcopy'
 
-const pieceColors = {
-    red: {
-        robot: '#FC5225',
-        highlight: '#fc844e',
-    },
-    yellow: {
-        robot: '#F1F711',
-        highlight: '#cecb67',
-    },
-    green: {
-        robot: '#25a72d',
-        highlight: '#6ca766',
-    },
-    blue: {
-        robot: '#278cbb',
-        highlight: '#72a3bb',
-    },
-    silver: {
-        robot: '#9ea7a5',
-        highlight: '#707977',
-    },
-}
+import {
+    drawBoard,
+    drawSelectedPieceAndMoves,
+    drawTarget,
+    pieceColours,
+} from './renderingUtils.js'
 
 let currentCanvas = null
 let currentGame = null
@@ -84,116 +68,21 @@ const Draw = () => {
     // TODO: Find tile size without resorting to only using width
     const tileSize = currentCanvas.width / currentGame.board.size.x
 
-    // Set Stroke and Fill styles for board
-    context.strokeStyle = '#A4A4A3'
-    context.lineWidth = 1
-
-    // Loop through and paint the board
-    for (let x = 0; x < currentGame.board.size.x; x++) {
-        for (let y = 0; y < currentGame.board.size.y; y++) {
-            // Paint the Tile
-            context.fillStyle = '#F4DCBF'
-            context.fillRect(x * tileSize, y * tileSize, tileSize, tileSize)
-
-            // TODO: Paint interior
-            // context.fillStyle = '#ffffff'
-            // context.fillRect(
-            //     x * tileSize + tileSize * 0.2,
-            //     y * tileSize + tileSize * 0.2,
-            //     tileSize * 0.6,
-            //     tileSize * 0.6
-            // )
-
-            // Paint the tile boarders
-            context.strokeRect(x * tileSize, y * tileSize, tileSize, tileSize)
-        }
-    }
+    drawBoard(context, currentGame.board, tileSize)
 
     if (!gameComplete) {
         // Paint selection and moves (below walls)
         if (currentSelectedPiece) {
-            context.fillStyle =
-                pieceColors[currentSelectedPiece.colour].highlight
-            context.fillRect(
-                currentSelectedPiece.coordinate[0] * tileSize + 1,
-                currentSelectedPiece.coordinate[1] * tileSize + 1,
-                tileSize - 2,
-                tileSize - 2
+            drawSelectedPieceAndMoves(
+                context,
+                currentSelectedPiece,
+                tileSize,
+                pieceColours[currentSelectedPiece.colour],
+                currentPossibleMoves
             )
-
-            // TODO: All possible moves for this piece
-            for (const direction of Object.values(currentPossibleMoves)) {
-                direction.forEach(tile => {
-                    context.fillRect(
-                        tile[0] * tileSize + 1,
-                        tile[1] * tileSize + 1,
-                        tileSize - 2,
-                        tileSize - 2
-                    )
-                })
-            }
         }
 
-        // Paint Target
-        const createTargetGradient = () => {
-            const gradient = context.createRadialGradient(
-                currentGame.puzzle.target.coordinate[0] * tileSize +
-                    tileSize / 2,
-                currentGame.puzzle.target.coordinate[1] * tileSize +
-                    tileSize / 2,
-                2,
-                currentGame.puzzle.target.coordinate[0] * tileSize +
-                    tileSize / 2,
-                currentGame.puzzle.target.coordinate[1] * tileSize +
-                    tileSize / 2,
-                tileSize / 2 - 4
-            )
-
-            if (currentGame.puzzle.target.colour === 'any') {
-                gradient.addColorStop(0, '#FFF')
-                gradient.addColorStop(1, '#000')
-            } else {
-                gradient.addColorStop(0, '#FFF')
-                gradient.addColorStop(
-                    1,
-                    pieceColors[currentGame.puzzle.target.colour].robot
-                )
-            }
-
-            return gradient
-        }
-
-        {
-            const targetX = currentGame.puzzle.target.coordinate[0]
-            const targetY = currentGame.puzzle.target.coordinate[1]
-
-            context.beginPath()
-            context.moveTo(
-                targetX * tileSize + tileSize / 2,
-                targetY * tileSize + 4
-            )
-
-            context.lineTo(
-                targetX * tileSize + tileSize - 4,
-                targetY * tileSize + tileSize / 2
-            )
-            context.lineTo(
-                targetX * tileSize + tileSize / 2,
-                targetY * tileSize + tileSize - 4
-            )
-            context.lineTo(
-                targetX * tileSize + 4,
-                targetY * tileSize + tileSize / 2
-            )
-            context.closePath()
-
-            // context.strokeStyle = '#FFF'
-            // context.lineWidth = 3
-            // context.stroke()
-
-            context.fillStyle = createTargetGradient()
-            context.fill()
-        }
+        drawTarget(context, tileSize, currentGame.puzzle.target)
     }
 
     // Paint the outside walls
@@ -255,7 +144,7 @@ const Draw = () => {
     context.lineWidth = 1
 
     currentPieces.forEach(piece => {
-        DrawPiece(piece, pieceColors[piece.colour].robot)
+        DrawPiece(piece, pieceColours[piece.colour].robot)
     })
 }
 

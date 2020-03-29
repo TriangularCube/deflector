@@ -7,7 +7,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import { Skeleton } from '@material-ui/lab'
 
 import { getTargetUrl } from './config/target'
-import { SetupGame } from './Game'
+import { SetupGame } from './Game/gameLogic.js'
 
 export const GameScreen = () => {
     const [data, setData] = useState({ loading: true })
