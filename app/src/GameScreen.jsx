@@ -7,7 +7,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import { Skeleton } from '@material-ui/lab'
 
 import { getTargetUrl } from './config/target'
-import { SetupGame } from './Game/gameLogic.js'
+import { setupGame } from './Game/gameLogic.ts'
 
 export const GameScreen = () => {
     const [data, setData] = useState({ loading: true })
@@ -88,7 +88,7 @@ const GameArea = props => {
 
     const game = props.game
     const canvasRef = useRef(null)
-    const [movelist, setMovelist] = useState(null)
+    const [moveHistory, setMoveHistory] = useState(null)
 
     useEffect(() => {
         if (!game) {
@@ -102,11 +102,12 @@ const GameArea = props => {
         canvas.width = 720
         canvas.height = 720
 
-        SetupGame(canvas, game, setMovelist)
+        setupGame(canvas, game, setMoveHistory)
     }, [game])
 
     return (
         <Container maxWidth='lg' className={classes.container}>
+            {/* Game Canvas Area*/}
             {game ? (
                 <canvas ref={canvasRef} className={classes.canvasPosition} />
             ) : (
@@ -121,6 +122,7 @@ const GameArea = props => {
 
             <div className={classes.spacer} />
 
+            {/* Side Bar */}
             {game ? (
                 <div
                     className={clsx(
@@ -130,16 +132,22 @@ const GameArea = props => {
                     )}
                 >
                     <Typography color='inherit' variant='h5'>
-                        Side Bar
+                        Move History
                     </Typography>
                     <div>
-                        {!movelist
+                        {!moveHistory
                             ? 'None'
-                            : movelist.map((element, index) => (
+                            : moveHistory.map((element, index) => (
                                   <div key={index}>
-                                      <Typography>{element.piece}</Typography>
                                       <Typography>
-                                          {element.direction}
+                                          {element.move
+                                              ? element.move.colour
+                                              : 'Puzzle Start'}
+                                      </Typography>
+                                      <Typography>
+                                          {element.move
+                                              ? element.move.direction
+                                              : ''}
                                       </Typography>
                                   </div>
                               ))}
