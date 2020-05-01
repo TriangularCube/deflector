@@ -2,9 +2,23 @@ import React, { useRef, useEffect, useState } from 'react'
 import { useLocation, useHistory } from 'react-router-dom'
 import clsx from 'clsx'
 
-import { Container, Typography } from '@material-ui/core'
+import {
+    Container,
+    Typography,
+    List,
+    ListItem,
+    ListItemText,
+    ListItemIcon,
+    Table,
+    TableHead,
+    TableBody,
+    TableRow,
+    TableCell,
+} from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { Skeleton } from '@material-ui/lab'
+
+import { ArrowUpward } from '@material-ui/icons'
 
 import { getTargetUrl } from './config/target'
 import { setupGame } from './Game/gameLogic.ts'
@@ -70,7 +84,7 @@ const useStyles = makeStyles({
         height: 720,
     },
     sideBarSize: {
-        width: 450,
+        width: 300,
         height: 720,
         overflowY: 'auto',
     },
@@ -134,24 +148,33 @@ const GameArea = props => {
                     <Typography color='inherit' variant='h5'>
                         Move History
                     </Typography>
-                    <div>
-                        {!moveHistory
-                            ? 'None'
-                            : moveHistory.map((element, index) => (
-                                  <div key={index}>
-                                      <Typography>
-                                          {element.move
-                                              ? element.move.colour
-                                              : 'Puzzle Start'}
-                                      </Typography>
-                                      <Typography>
-                                          {element.move
-                                              ? element.move.direction
-                                              : ''}
-                                      </Typography>
-                                  </div>
-                              ))}
-                    </div>
+
+                    {!moveHistory ? (
+                        'Loading'
+                    ) : (
+                        <Table>
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell>#</TableCell>
+                                    <TableCell align='right'>Move</TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {moveHistory.map((element, index) => {
+                                    return (
+                                        <TableRow key={index}>
+                                            <TableCell>{index}</TableCell>
+                                            <TableCell align='right' button>
+                                                {element.move
+                                                    ? element.move.colour
+                                                    : 'Initial State'}
+                                            </TableCell>
+                                        </TableRow>
+                                    )
+                                })}
+                            </TableBody>
+                        </Table>
+                    )}
                 </div>
             ) : (
                 <Skeleton
