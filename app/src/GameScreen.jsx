@@ -104,6 +104,8 @@ const GameArea = props => {
     const canvasRef = useRef(null)
     const [moveHistory, setMoveHistory] = useState(null)
 
+    // TODO Update history, click listener, handle selection, scroll to selection
+
     useEffect(() => {
         if (!game) {
             return
@@ -162,9 +164,16 @@ const GameArea = props => {
                             <TableBody>
                                 {moveHistory.map((element, index) => {
                                     return (
-                                        <TableRow key={index}>
+                                        <TableRow
+                                            key={index}
+                                            // selected={index % 2 === 0}
+                                            hover
+                                            onClick={() => {
+                                                console.log(index)
+                                            }}
+                                        >
                                             <TableCell>{index}</TableCell>
-                                            <TableCell align='right' button>
+                                            <TableCell align='right'>
                                                 {element.move
                                                     ? element.move.colour
                                                     : 'Initial State'}
