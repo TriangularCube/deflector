@@ -1,15 +1,16 @@
 export interface GameState {
     board: Board
     target: Target
-    pieces: [ColourAndLocation]
-    history: [HistoryEntry]
+    pieces: ColourAndLocation[]
+    history: HistoryEntry[]
+    viewMove: number
     selection: {
         piece?: ColourAndLocation
         possibleMoves?: {
-            North?: [Coordinate]
-            West?: [Coordinate]
-            South?: [Coordinate]
-            East?: [Coordinate]
+            North?: Coordinate[]
+            West?: Coordinate[]
+            South?: Coordinate[]
+            East?: Coordinate[]
         }
     }
     gameComplete: boolean
@@ -21,9 +22,9 @@ export type Coordinate = [number, number]
 
 export interface Board {
     size: BoardSize
-    walls: [Coordinate]
-    goals: [ColourAndLocation]
-    notValid: [Coordinate]
+    walls: Coordinate[]
+    goals: ColourAndLocation[]
+    notValid: Coordinate[]
 }
 
 export interface BoardSize {
@@ -43,7 +44,7 @@ export interface ColourAndLocation {
 
 export interface HistoryEntry {
     move: Move
-    state: [ColourAndLocation]
+    state: ColourAndLocation[]
 }
 
 export interface Move {

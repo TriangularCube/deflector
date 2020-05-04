@@ -1,4 +1,4 @@
-import { ColourAndLocation, GameState } from './gameInterfaces'
+import { Board, ColourAndLocation, GameState, Target } from './gameInterfaces'
 
 let canvas: HTMLCanvasElement = null
 
@@ -23,28 +23,34 @@ export function draw(gameState: GameState) {
     // TODO: Find tile size without resorting to only using width
     const tileSize: number = canvas.width / gameState.board.size.x
 
-    drawBoard(context, gameState, tileSize)
+    drawBoard(context, gameState.board, tileSize)
 
     drawSelection(context, gameState, tileSize)
 
-    drawTarget(context, gameState, tileSize)
+    drawTarget(context, gameState.target, gameState.gameComplete, tileSize)
 
-    drawWalls(context, gameState, tileSize)
+    drawWalls(context, gameState.board, tileSize)
 
-    drawPieces(context, gameState, tileSize)
+    const piecesToDraw =
+        gameState.viewMove === gameState.history.length - 1
+            ? gameState.pieces
+            : gameState.history[gameState.viewMove].state
+
+    console.log(piecesToDraw)
+    drawPieces(context, piecesToDraw, tileSize)
 }
 
 const drawBoard = (
     context: CanvasRenderingContext2D,
-    gameState: GameState,
+    board: Board,
     tileSize: number
 ) => {
     // Set Stroke and Fill styles for board
     context.strokeStyle = '#A4A4A3'
     context.lineWidth = 1
 
-    for (let x = 0; x < gameState.board.size.x; x++) {
-        for (let y = 0; y < gameState.board.size.y; y++) {
+    for (let x = 0; x < board.size.x; x++) {
+        for (let y = 0; y < board.size.y; y++) {
             // Paint the Tile
             context.fillStyle = '#F4DCBF'
             context.fillRect(x * tileSize, y * tileSize, tileSize, tileSize)
@@ -66,7 +72,7 @@ const drawBoard = (
 
 const drawWalls = (
     context: CanvasRenderingContext2D,
-    gameState: GameState,
+    board: Board,
     tileSize: number
 ) => {
     // Paint the outside walls
@@ -76,7 +82,7 @@ const drawWalls = (
 
     // Paint all invalid tiles
     context.fillStyle = '#000000'
-    gameState.board.notValid.forEach(tile => {
+    board.notValid.forEach(tile => {
         context.fillRect(
             tile[0] * tileSize,
             tile[1] * tileSize,
@@ -88,7 +94,7 @@ const drawWalls = (
     // Paint walls
     context.strokeStyle = '#000000'
     context.lineWidth = 5
-    gameState.board.walls.forEach(wall => {
+    board.walls.forEach(wall => {
         const isHorizontal = wall[0][0] === wall[1][0]
 
         const referenceTile = isHorizontal
@@ -134,13 +140,13 @@ const pieceColours = {
 
 const drawPieces = (
     context: CanvasRenderingContext2D,
-    gameState: GameState,
+    pieces: ColourAndLocation[],
     tileSize: number
 ) => {
     context.strokeStyle = '#000000'
     context.lineWidth = 1
 
-    gameState.pieces.forEach(piece => {
+    pieces.forEach(piece => {
         context.fillStyle = pieceColours[piece.colour].robot
 
         context.beginPath()
@@ -190,15 +196,16 @@ const drawSelection = (
 
 const drawTarget = (
     context: CanvasRenderingContext2D,
-    gameState: GameState,
+    target: Target,
+    gameComplete: boolean,
     tileSize: number
 ) => {
-    if(gameState.gameComplete){
+    if (gameComplete) {
         return
     }
 
-    const targetX = gameState.target.coordinate[0]
-    const targetY = gameState.target.coordinate[1]
+    const targetX = target.coordinate[0]
+    const targetY = target.coordinate[1]
 
     context.beginPath()
     context.moveTo(targetX * tileSize + tileSize / 2, targetY * tileSize + 4)
@@ -223,12 +230,12 @@ const drawTarget = (
         tileSize / 2 - 4
     )
 
-    if (gameState.target.colour === 'any') {
+    if (target.colour === 'any') {
         gradient.addColorStop(0, '#FFF')
         gradient.addColorStop(1, '#000')
     } else {
         gradient.addColorStop(0, '#FFF')
-        gradient.addColorStop(1, pieceColours[gameState.target.colour].robot)
+        gradient.addColorStop(1, pieceColours[target.colour].robot)
     }
     context.fillStyle = gradient
     context.fill()

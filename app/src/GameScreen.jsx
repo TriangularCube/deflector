@@ -5,10 +5,6 @@ import clsx from 'clsx'
 import {
     Container,
     Typography,
-    List,
-    ListItem,
-    ListItemText,
-    ListItemIcon,
     Table,
     TableHead,
     TableBody,
@@ -21,7 +17,7 @@ import { Skeleton } from '@material-ui/lab'
 import { ArrowUpward } from '@material-ui/icons'
 
 import { getTargetUrl } from './config/target'
-import { setupGame } from './Game/gameLogic.ts'
+import { setupGame, setMoveNumber } from './Game/gameLogic.ts'
 
 export const GameScreen = () => {
     const [data, setData] = useState({ loading: true })
@@ -103,6 +99,7 @@ const GameArea = props => {
     const game = props.game
     const canvasRef = useRef(null)
     const [moveHistory, setMoveHistory] = useState(null)
+    const [selectedMove, setSelectedMove] = useState(0)
 
     // TODO Update history, click listener, handle selection, scroll to selection
 
@@ -120,6 +117,13 @@ const GameArea = props => {
 
         setupGame(canvas, game, setMoveHistory)
     }, [game])
+
+    useEffect(() => {
+        if (!moveHistory) {
+            return
+        }
+        setSelectedMove(moveHistory.length - 1)
+    }, [moveHistory])
 
     return (
         <Container maxWidth='lg' className={classes.container}>
@@ -166,10 +170,11 @@ const GameArea = props => {
                                     return (
                                         <TableRow
                                             key={index}
-                                            // selected={index % 2 === 0}
+                                            selected={index === selectedMove}
                                             hover
                                             onClick={() => {
-                                                console.log(index)
+                                                setSelectedMove(index)
+                                                setMoveNumber(index)
                                             }}
                                         >
                                             <TableCell>{index}</TableCell>

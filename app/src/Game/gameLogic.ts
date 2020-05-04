@@ -20,6 +20,7 @@ export function setupGame(canvas, game, raiseMoveEvent): void {
                 state: deepcopy(game.puzzle.pieces),
             },
         ],
+        viewMove: 0,
         selection: {
             piece: null,
             possibleMoves: null,
@@ -33,6 +34,19 @@ export function setupGame(canvas, game, raiseMoveEvent): void {
     canvas.onclick = ClickHandler
 
     requestAnimationFrame(() => setupRendering(canvas, gameState))
+}
+
+export function setMoveNumber(moveNumber: number) {
+    if (moveNumber < 0 || moveNumber > gameState.history.length - 1) {
+        throw Error('Invalid move number')
+    }
+
+    gameState.viewMove = moveNumber
+
+    gameState.selection.piece = null
+    gameState.selection.possibleMoves = null
+
+    requestAnimationFrame(invokeDraw)
 }
 
 const ClickHandler = event => {
@@ -59,6 +73,12 @@ const ClickHandler = event => {
                 ).length > 0
             ) {
                 // If clicked on a possible move
+
+                gameState.history = gameState.history.slice(
+                    0,
+                    gameState.viewMove + 1
+                )
+                gameState.viewMove++
 
                 gameState.selection.piece.coordinate = array[array.length - 1]
 
@@ -95,7 +115,12 @@ const ClickHandler = event => {
 
     if (!clickedOnMove) {
         // Otherwise find if clicked on a piece
-        gameState.selection.piece = gameState.pieces.find(
+        const referencePieces =
+            gameState.viewMove === gameState.history.length - 1
+                ? gameState.pieces
+                : gameState.history[gameState.viewMove].state
+
+        gameState.selection.piece = referencePieces.find(
             element =>
                 element.coordinate[0] === clickedX &&
                 element.coordinate[1] === clickedY
