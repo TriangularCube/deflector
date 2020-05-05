@@ -194,10 +194,6 @@ const drawTarget = (
     gameComplete: boolean,
     tileSize: number
 ) => {
-    if (gameComplete) {
-        return
-    }
-
     const targetX = target.coordinate[0]
     const targetY = target.coordinate[1]
 
