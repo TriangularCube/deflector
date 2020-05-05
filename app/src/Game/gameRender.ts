@@ -31,13 +31,7 @@ export function draw(gameState: GameState) {
 
     drawWalls(context, gameState.board, tileSize)
 
-    const piecesToDraw =
-        gameState.viewMove === gameState.history.length - 1
-            ? gameState.pieces
-            : gameState.history[gameState.viewMove].state
-
-    console.log(piecesToDraw)
-    drawPieces(context, piecesToDraw, tileSize)
+    drawPieces(context, gameState.historyPointer.positions, tileSize)
 }
 
 const drawBoard = (

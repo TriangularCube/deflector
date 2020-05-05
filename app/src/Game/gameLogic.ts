@@ -13,14 +13,16 @@ export function setupGame(canvas, game, raiseMoveEvent): void {
     gameState = {
         board: deepcopy(game.board),
         target: deepcopy(game.puzzle.target),
-        pieces: deepcopy(game.puzzle.pieces),
         history: [
             {
                 move: null,
                 state: deepcopy(game.puzzle.pieces),
             },
         ],
-        viewMove: 0,
+        historyPointer: {
+            index: 0,
+            positions: deepcopy(game.puzzle.pieces),
+        },
         selection: {
             piece: null,
             possibleMoves: null,
@@ -36,20 +38,36 @@ export function setupGame(canvas, game, raiseMoveEvent): void {
     requestAnimationFrame(() => setupRendering(canvas, gameState))
 }
 
-export function setMoveNumber(moveNumber: number) {
-    if (moveNumber < 0 || moveNumber > gameState.history.length - 1) {
+export function setMovePointer(pointer: number) {
+    if (pointer < 0 || pointer > gameState.history.length - 1) {
         throw Error('Invalid move number')
     }
 
-    gameState.viewMove = moveNumber
+    gameState.historyPointer = {
+        index: pointer,
+        positions: deepcopy(gameState.history[pointer].state),
+    }
 
-    gameState.selection.piece = null
-    gameState.selection.possibleMoves = null
+    if (pointer > 0) {
+        gameState.selection.piece = gameState.historyPointer.positions.find(
+            element => element.colour === gameState.history[pointer].move.colour
+        )
+        findPossibleMoves()
+    } else {
+        gameState.selection.piece = null
+        gameState.selection.possibleMoves = null
+    }
 
     requestAnimationFrame(invokeDraw)
 }
 
 const ClickHandler = event => {
+    event.preventDefault()
+
+    if (gameState.gameComplete) {
+        return
+    }
+
     // TODO Standardize calculating Tile Size
     const tileSize = event.target.width / gameState.board.size.x
 
@@ -76,14 +94,14 @@ const ClickHandler = event => {
 
                 gameState.history = gameState.history.slice(
                     0,
-                    gameState.viewMove + 1
+                    gameState.historyPointer.index + 1
                 )
-                gameState.viewMove++
+                gameState.historyPointer.index++
 
                 gameState.selection.piece.coordinate = array[array.length - 1]
 
                 gameState.history.push({
-                    state: deepcopy(gameState.pieces),
+                    state: deepcopy(gameState.historyPointer.positions),
                     move: {
                         direction: direction as Direction,
                         colour: gameState.selection.piece.colour,
@@ -115,12 +133,7 @@ const ClickHandler = event => {
 
     if (!clickedOnMove) {
         // Otherwise find if clicked on a piece
-        const referencePieces =
-            gameState.viewMove === gameState.history.length - 1
-                ? gameState.pieces
-                : gameState.history[gameState.viewMove].state
-
-        gameState.selection.piece = referencePieces.find(
+        gameState.selection.piece = gameState.historyPointer.positions.find(
             element =>
                 element.coordinate[0] === clickedX &&
                 element.coordinate[1] === clickedY
@@ -128,6 +141,17 @@ const ClickHandler = event => {
     }
 
     gameState.selection.possibleMoves = null
+
+    findPossibleMoves()
+
+    requestAnimationFrame(invokeDraw)
+}
+
+const findPossibleMoves = () => {
+    if (!gameState.selection?.piece){
+        console.error("Finding possible moves on null selection")
+        return
+    }
 
     if (gameState.selection.piece) {
         for (const direction of [
@@ -158,8 +182,6 @@ const ClickHandler = event => {
             gameState.selection.possibleMoves[direction] = route
         }
     }
-
-    requestAnimationFrame(invokeDraw)
 }
 
 const getNextNode = (
@@ -206,7 +228,7 @@ const isBlocked = (current, next) => {
     }
 
     // Check for other pieces
-    const filterPieces = gameState.pieces.filter(
+    const filterPieces = gameState.historyPointer.positions.filter(
         piece =>
             piece.colour !== gameState.selection.piece.colour &&
             piece.coordinate[0] === next[0] &&

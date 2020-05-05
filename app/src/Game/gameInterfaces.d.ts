@@ -1,9 +1,8 @@
 export interface GameState {
     board: Board
     target: Target
-    pieces: ColourAndLocation[]
     history: HistoryEntry[]
-    viewMove: number
+    historyPointer: { index: number; positions: ColourAndLocation[] }
     selection: {
         piece?: ColourAndLocation
         possibleMoves?: {
