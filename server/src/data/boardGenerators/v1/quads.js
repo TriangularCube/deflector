@@ -438,6 +438,24 @@ module.exports = {
                     [5, 5],
                 ],
             ],
+            goals: [
+                {
+                    colour: 'yellow',
+                    coordinate: [3, 2],
+                },
+                {
+                    colour: 'red',
+                    coordinate: [2, 4],
+                },
+                {
+                    colour: 'blue',
+                    coordinate: [5, 3],
+                },
+                {
+                    colour: 'green',
+                    coordinate: [4, 5],
+                },
+            ],
             notValid: [[7, 7]],
         },
     ],
@@ -648,6 +666,7 @@ module.exports = {
                     colour: 'yellow',
                 },
             ],
+            notValid: [[7, 7]],
         },
     ],
     // D is Green Board
@@ -779,6 +798,7 @@ module.exports = {
                     colour: 'red',
                 },
             ],
+            notValid: [[7, 7]],
         },
         {
             id: '3D',
@@ -838,6 +858,7 @@ module.exports = {
                     colour: 'blue',
                 },
             ],
+            notValid: [[7, 7]],
         },
     ],
 }
