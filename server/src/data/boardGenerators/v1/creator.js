@@ -25,12 +25,14 @@ const generateBoard = () => {
     }
 
     // Randomly choose 4 boards
-    let quadrants = [
-        deepcopy(quads.A[Math.floor(Math.random() * quads.A.length)]),
-        deepcopy(quads.B[Math.floor(Math.random() * quads.B.length)]),
-        deepcopy(quads.C[Math.floor(Math.random() * quads.C.length)]),
-        deepcopy(quads.D[Math.floor(Math.random() * quads.D.length)]),
-    ]
+    const newQuads = deepcopy(quads)
+
+    shuffle(newQuads.A)
+    shuffle(newQuads.B)
+    shuffle(newQuads.C)
+    shuffle(newQuads.D)
+
+    let quadrants = [newQuads.A[0], newQuads.B[0], newQuads.C[0], newQuads.D[0]]
 
     // Shuffle them
     quadrants = shuffle(quadrants)
