@@ -49,7 +49,6 @@ export const SideBar = props => {
                             ref={el => (topRef = el)}
                             style={{ scrollMarginTop: '5rem' }}
                         >
-                            {/*<TableRow ref={el => (topRef = el)} />*/}
                             {moveHistory.map((element, index) => {
                                 return (
                                     <TableRow
