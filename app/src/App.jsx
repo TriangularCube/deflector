@@ -7,7 +7,7 @@ import { CssBaseline } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 
 import { About } from './About'
-import { GameScreen } from './GameScreen'
+import { GameScreen } from './GameScreen/GameScreen.jsx'
 import { NavBar } from './NavBar'
 import { Target } from './Target'
 

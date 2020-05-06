@@ -17,17 +17,18 @@ export function setupGame(canvas, game, raiseMoveEvent): void {
             {
                 move: null,
                 state: deepcopy(game.puzzle.pieces),
+                gameComplete: false,
             },
         ],
         historyPointer: {
             index: 0,
             positions: deepcopy(game.puzzle.pieces),
+            gameComplete: false,
         },
         selection: {
             piece: null,
             possibleMoves: null,
         },
-        gameComplete: false,
     }
 
     invokeSideBarUpdate = raiseMoveEvent
@@ -46,9 +47,10 @@ export function setMovePointer(pointer: number) {
     gameState.historyPointer = {
         index: pointer,
         positions: deepcopy(gameState.history[pointer].state),
+        gameComplete: gameState.history[pointer].gameComplete,
     }
 
-    if (pointer > 0) {
+    if (pointer > 0 && !gameState.historyPointer.gameComplete) {
         gameState.selection.piece = gameState.historyPointer.positions.find(
             element => element.colour === gameState.history[pointer].move.colour
         )
@@ -64,7 +66,7 @@ export function setMovePointer(pointer: number) {
 const ClickHandler = event => {
     event.preventDefault()
 
-    if (gameState.gameComplete) {
+    if (gameState.historyPointer.gameComplete) {
         return
     }
 
@@ -92,21 +94,41 @@ const ClickHandler = event => {
             ) {
                 // If clicked on a possible move
 
+                // Remove future entries from history
                 gameState.history = gameState.history.slice(
                     0,
                     gameState.historyPointer.index + 1
                 )
-                gameState.historyPointer.index++
 
-                gameState.selection.piece.coordinate = array[array.length - 1]
+                const currentSelectedPiece = gameState.selection.piece
 
+                // Move selected piece to end of direction array
+                currentSelectedPiece.coordinate = array[array.length - 1]
+
+                // Check for game completion
+                let gameOver = false
+                if (
+                    currentSelectedPiece.colour === gameState.target.colour &&
+                    currentSelectedPiece.coordinate[0] ===
+                        gameState.target.coordinate[0] &&
+                    currentSelectedPiece.coordinate[1] ===
+                        gameState.target.coordinate[1]
+                ) {
+                    // Yup, hit our target
+                    gameOver = true
+                }
+
+                // Push history
                 gameState.history.push({
                     state: deepcopy(gameState.historyPointer.positions),
                     move: {
                         direction: direction as Direction,
                         colour: gameState.selection.piece.colour,
                     },
+                    gameComplete: gameOver,
                 })
+
+                setMovePointer(++gameState.historyPointer.index)
 
                 // Raise a moved event in the React view
                 invokeSideBarUpdate([...gameState.history])
@@ -115,19 +137,6 @@ const ClickHandler = event => {
 
                 break
             }
-        }
-
-        const currentSelectedPiece = gameState.selection.piece
-
-        if (
-            currentSelectedPiece.colour === gameState.target.colour &&
-            currentSelectedPiece.coordinate[0] ===
-                gameState.target.coordinate[0] &&
-            currentSelectedPiece.coordinate[1] ===
-                gameState.target.coordinate[1]
-        ) {
-            // Yup, hit our target
-            gameState.gameComplete = true
         }
     }
 
@@ -148,8 +157,7 @@ const ClickHandler = event => {
 }
 
 const findPossibleMoves = () => {
-    if (!gameState.selection?.piece){
-        console.error("Finding possible moves on null selection")
+    if (!gameState.selection?.piece) {
         return
     }
 

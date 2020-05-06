@@ -2,7 +2,11 @@ export interface GameState {
     board: Board
     target: Target
     history: HistoryEntry[]
-    historyPointer: { index: number; positions: ColourAndLocation[] }
+    historyPointer: {
+        index: number
+        positions: ColourAndLocation[]
+        gameComplete: boolean
+    }
     selection: {
         piece?: ColourAndLocation
         possibleMoves?: {
@@ -12,7 +16,6 @@ export interface GameState {
             East?: Coordinate[]
         }
     }
-    gameComplete: boolean
 }
 
 export type Direction = 'north' | 'south' | 'east' | 'west'
@@ -44,6 +47,7 @@ export interface ColourAndLocation {
 export interface HistoryEntry {
     move: Move
     state: ColourAndLocation[]
+    gameComplete: boolean
 }
 
 export interface Move {
