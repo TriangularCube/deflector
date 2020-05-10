@@ -6,7 +6,7 @@ import { Skeleton } from '@material-ui/lab'
 import clsx from 'clsx'
 
 import { setupGame } from '../Game/gameLogic.ts'
-import { SideBar } from './SideBar.jsx'
+import { MoveHistory } from './MoveHistory.jsx'
 
 const useStyles = makeStyles({
     container: {
@@ -115,7 +115,7 @@ export const GameArea = props => {
                         <Tab label='History' />
                         <Tab label='Leaderboard' />
                     </Tabs>
-                    <SideBar
+                    <MoveHistory
                         hidden={tabValue !== 0}
                         selectedMove={selectedMove}
                         setSelectedMove={setSelectedMove}

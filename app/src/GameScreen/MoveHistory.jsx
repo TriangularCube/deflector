@@ -13,7 +13,7 @@ import {
 import { MoveIcon } from './MoveIcon.jsx'
 import { setMovePointer } from '../Game/gameLogic.ts'
 
-export const SideBar = props => {
+export const MoveHistory = props => {
     const { moveHistory, selectedMove } = props
 
     const selectMove = pointer => {
