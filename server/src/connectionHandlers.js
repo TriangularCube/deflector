@@ -102,7 +102,7 @@ const connect = async (req, res) => {
 
 const broadcastNewGame = gameID => {
     for (const entry of Object.values(listOfConnections)) {
-        entry.connection.write(`event: newGame\ndata: ${gameID}`)
+        entry.connection.write(`event: newGame\ndata: ${gameID}\n\n`)
     }
 }
 
