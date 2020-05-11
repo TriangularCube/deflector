@@ -7,10 +7,11 @@ const rule = new schedule.RecurrenceRule()
 rule.hour = new schedule.Range(0, 23)
 rule.minute = 0
 
-// Classic games
-const { makeNewGame } = require('./gameTypes/classic.js')
+const { gameTypes } = require('./gameTypes/gameTypes.js')
 
 /*let job =*/ schedule.scheduleJob(rule, async () => {
-    const id = await makeNewGame()
-    broadcastNewGame(id)
+    for (const type of Object.values(gameTypes)) {
+        await type.makeNewGame()
+    }
+    broadcastNewGame()
 })
