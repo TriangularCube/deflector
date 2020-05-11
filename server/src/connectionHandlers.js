@@ -1,10 +1,8 @@
 const { v1: uuid } = require('uuid')
 
-const listOfConnections = {}
+const { gameTypes } = require('./gameTypes/gameTypes.js')
 
-const gameTypes = {
-    classic: require('./gameTypes/classic'),
-}
+const listOfConnections = {}
 
 const latest = async (req, res) => {
     // Get tokens in request
@@ -86,13 +84,11 @@ const connect = async (req, res) => {
         game
     )}\n\n\n`
     res.write(message)
-    res.flush()
 
     // Ping every 20 seconds to keep connection alive
     //  There doesn't need to be an actual handler for this event
     const heartbeatID = setInterval(() => {
         res.write(`event: heartbeat\n\n\n`)
-        res.flush()
     }, 20000)
 
     req.on('close', () => {
@@ -102,6 +98,12 @@ const connect = async (req, res) => {
         delete listOfConnections[clientID]
         clearInterval(heartbeatID)
     })
+}
+
+const broadcastNewGame = gameID => {
+    for (const entry of Object.values(listOfConnections)) {
+        entry.connection.write(`event: newGame\ndata: ${gameID}`)
+    }
 }
 
 const submit = (req, res) => {
@@ -136,6 +138,7 @@ module.exports = {
     latest,
     connect,
     submit,
+    broadcastNewGame,
 }
 
 const badRequest = (res, message) => {

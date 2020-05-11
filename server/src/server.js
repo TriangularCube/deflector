@@ -1,13 +1,13 @@
 const http = require('http')
 
-// TODO Load Game State
+const { ensureAllTypesExist } = require('./gameTypes/gameTypes.js')
 
 // Fire off scheduling
 require('./schedule.js')
 
 const { latest, connect, submit } = require('./connectionHandlers')
 
-const server = http.createServer(async (req, res) => {
+const server = http.createServer((req, res) => {
     // Allow all OPTIONS requests
     if (req.method === 'OPTIONS') {
         res.writeHead(200, {
@@ -47,6 +47,8 @@ const server = http.createServer(async (req, res) => {
     res.end('Cannot find location')
 })
 
-server.listen(3000, () => {
-    console.log('Server is running')
+ensureAllTypesExist().then(() => {
+    server.listen(3000, () => {
+        console.log('Server is running')
+    })
 })

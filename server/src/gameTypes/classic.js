@@ -8,7 +8,9 @@ const getNewestId = async () => {
 }
 
 const getGame = async id => {
-    return await db.asyncFindOne({ _id: id })
+    const game = await db.asyncFindOne({ _id: id })
+    game.type = 'classic'
+    return game
 }
 
 const makeNewGame = async () => {
@@ -16,12 +18,14 @@ const makeNewGame = async () => {
 
     const id = await db.getNextId()
 
-    db.insert({
+    await db.asyncInsert({
         _id: id,
         time: Date.now(),
         board: newBoard,
         puzzle: generatePuzzleFromBoard(newBoard),
     })
+
+    return id
 }
 
 module.exports = {
@@ -29,10 +33,3 @@ module.exports = {
     getNewestId,
     getGame,
 }
-
-// Make sure to seed the DB with at least one game
-getNewestId().then(res => {
-    if (!res) {
-        makeNewGame()
-    }
-})
