@@ -11,18 +11,9 @@ import {
     MenuItem,
     ListItemText,
 } from '@material-ui/core'
-import { makeStyles } from '@material-ui/core/styles'
 import { LocationSearching } from '@material-ui/icons'
 
-const useStyles = makeStyles({
-    spacer: {
-        flex: 1,
-    },
-})
-
 export const NavBar = () => {
-    const classes = useStyles()
-
     //region Menu
     const [anchor, setAnchor] = useState(null)
     const openMenu = event => {
@@ -42,7 +33,7 @@ export const NavBar = () => {
                     </Typography>
                 </ButtonBase>
 
-                <div className={classes.spacer} />
+                <div style={{ flex: 4 }} />
 
                 <div>
                     <IconButton color='inherit' onClick={openMenu}>

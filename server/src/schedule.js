@@ -1,7 +1,5 @@
 const schedule = require('node-schedule')
 
-const { broadcastNewGame } = require('./connectionHandlers.js')
-
 const rule = new schedule.RecurrenceRule()
 
 rule.hour = new schedule.Range(0, 23)
@@ -13,5 +11,4 @@ const { gameTypes } = require('./gameTypes/gameTypes.js')
     for (const type of Object.values(gameTypes)) {
         await type.makeNewGame()
     }
-    broadcastNewGame()
 })

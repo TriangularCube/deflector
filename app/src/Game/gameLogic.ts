@@ -7,9 +7,6 @@ let gameState: GameState = null
 let invokeSideBarUpdate = null
 
 export function setupGame(canvas, game, raiseMoveEvent): void {
-    // DEBUG
-    console.log(game)
-
     gameState = {
         board: deepcopy(game.board),
         target: deepcopy(game.puzzle.target),

@@ -7,7 +7,7 @@ const generateRandomCoordinate = (board, blacklist) => {
     } while (
         board.notValid.some(element => element[0] === x && element[1] === y) ||
         board.goals.some(element => element[0] === x && element[1] === y) ||
-        (blacklist && blacklist.includes([x, y]))
+        (blacklist && blacklist.some(element => element[0] === x && element[1] === y))
     )
 
     return [x, y]

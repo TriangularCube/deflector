@@ -100,12 +100,6 @@ const connect = async (req, res) => {
     })
 }
 
-const broadcastNewGame = () => {
-    for (const entry of Object.values(listOfConnections)) {
-        entry.connection.write(`event: newGame\n\n`)
-    }
-}
-
 const submit = (req, res) => {
     // A solution has been submitted!
 
@@ -138,7 +132,6 @@ module.exports = {
     latest,
     connect,
     submit,
-    broadcastNewGame,
 }
 
 const badRequest = (res, message) => {

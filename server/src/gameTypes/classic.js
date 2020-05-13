@@ -9,6 +9,10 @@ const getNewestId = async () => {
 
 const getGame = async id => {
     const game = await db.asyncFindOne({ _id: id })
+    if (!game) {
+        return null
+    }
+
     game.type = 'classic'
     return game
 }
