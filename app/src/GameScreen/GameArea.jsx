@@ -44,15 +44,10 @@ const useStyles = makeStyles({
 export const GameArea = props => {
     const classes = useStyles()
 
-    let bottomRef
-    const setBottomRef = ref => {
-        bottomRef = ref
-    }
+    const [moveHistory, setMoveHistory] = useState(null)
 
     const game = props.game
     const canvasRef = useRef(null)
-    const [moveHistory, setMoveHistory] = useState(null)
-    const [selectedMove, setSelectedMove] = useState(0)
     const [tabValue, setTabValue] = useState(0)
 
     useEffect(() => {
@@ -72,14 +67,6 @@ export const GameArea = props => {
 
         setupGame(canvas, game, setMoveHistory)
     }, [game])
-
-    useEffect(() => {
-        if (!moveHistory) {
-            return
-        }
-        setSelectedMove(moveHistory.length - 1)
-        bottomRef.scrollIntoView({ behavior: 'smooth' })
-    }, [moveHistory])
 
     return (
         <Container maxWidth='lg' className={classes.container}>
@@ -118,10 +105,7 @@ export const GameArea = props => {
                     </Tabs>
                     <MoveHistory
                         hidden={tabValue !== 0}
-                        selectedMove={selectedMove}
-                        setSelectedMove={setSelectedMove}
                         moveHistory={moveHistory}
-                        setBottomRef={setBottomRef}
                     />
                     <Leaderboard
                         hidden={tabValue !== 1}

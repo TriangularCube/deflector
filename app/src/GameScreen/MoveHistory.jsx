@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 import {
     Button,
@@ -18,14 +18,25 @@ export const MoveHistory = props => {
         return null
     }
 
-    const { moveHistory, selectedMove } = props
+    const { moveHistory } = props
+
+    const [selectedMove, setSelectedMove] = useState(0)
 
     const selectMove = pointer => {
-        props.setSelectedMove(pointer)
+        setSelectedMove(pointer)
         setMovePointer(pointer)
     }
 
     let topRef
+    let bottomRef
+
+    useEffect(() => {
+        if (!moveHistory) {
+            return
+        }
+        setSelectedMove(moveHistory.length - 1)
+        bottomRef.scrollIntoView({ behavior: 'smooth' })
+    }, [moveHistory])
 
     return (
         <div
@@ -86,7 +97,7 @@ export const MoveHistory = props => {
                                     </TableRow>
                                 )
                             })}
-                            <TableRow ref={el => props.setBottomRef(el)} />
+                            <TableRow ref={el => (bottomRef = el)} />
                         </TableBody>
                     </Table>
                 )}
