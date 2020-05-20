@@ -14,6 +14,10 @@ import { MoveIcon } from './MoveIcon.jsx'
 import { setMovePointer } from '../Game/gameLogic.ts'
 
 export const MoveHistory = props => {
+    if (props.hidden) {
+        return null
+    }
+
     const { moveHistory, selectedMove } = props
 
     const selectMove = pointer => {
@@ -27,12 +31,12 @@ export const MoveHistory = props => {
         <div
             style={{
                 flex: 1,
-                display: props.hidden ? 'none' : 'flex',
+                display: 'flex',
                 flexDirection: 'column',
-                overflowY: 'auto',
+                height: '100%'
             }}
         >
-            <div style={{ flex: 1, overflowY: 'auto' }}>
+            <div style={{ flex: 1, overflowY: 'auto', height: '100%' }}>
                 {!moveHistory ? (
                     // Placeholder while moveHistory is initialized
                     'Loading'

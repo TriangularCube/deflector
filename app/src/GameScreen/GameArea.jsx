@@ -122,6 +122,10 @@ export const GameArea = props => {
                         moveHistory={moveHistory}
                         setBottomRef={setBottomRef}
                     />
+                    <Leaderboard
+                        hidden={tabValue !== 1}
+                        leaderboard={game.leaderboard}
+                    />
                 </div>
             ) : (
                 <Skeleton
