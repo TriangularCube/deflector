@@ -33,7 +33,7 @@ export const MoveHistory = props => {
                 flex: 1,
                 display: 'flex',
                 flexDirection: 'column',
-                height: '100%'
+                overflowY: 'auto',
             }}
         >
             <div style={{ flex: 1, overflowY: 'auto', height: '100%' }}>
