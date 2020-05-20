@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
 
 import {
-    Button,
+    Button, Divider,
     Table,
     TableBody,
     TableCell,
     TableHead,
-    TableRow,
+    TableRow, TextField,
     Typography,
 } from '@material-ui/core'
 
@@ -102,6 +102,25 @@ export const MoveHistory = props => {
                     </Table>
                 )}
             </div>
+
+                <Divider />
+                <div>
+                    <Typography color='textPrimary'>
+                        Would you like to submit your score?
+                    </Typography>
+                    <div
+                        style={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                        }}
+                    >
+                        <TextField placeholder='My Name' />
+                        <Button>Submit</Button>
+                    </div>
+                </div>
+
+            <Divider />
 
             <div
                 style={{
