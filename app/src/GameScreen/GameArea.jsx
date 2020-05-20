@@ -7,6 +7,7 @@ import clsx from 'clsx'
 
 import { setupGame } from '../Game/gameLogic.ts'
 import { MoveHistory } from './MoveHistory.jsx'
+import { Leaderboard } from './Leaderboard.jsx'
 
 const useStyles = makeStyles({
     container: {

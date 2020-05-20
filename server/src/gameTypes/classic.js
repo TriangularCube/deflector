@@ -26,6 +26,7 @@ const makeNewGame = async () => {
         _id: id,
         time: Date.now(),
         board: newBoard,
+        leaderboard: [],
         puzzle: generatePuzzleFromBoard(newBoard),
     })
 
