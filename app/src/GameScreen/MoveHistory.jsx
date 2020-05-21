@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from 'react'
 
 import {
-    Button, Divider,
+    Button,
+    Divider,
     Table,
     TableBody,
     TableCell,
     TableHead,
-    TableRow, TextField,
+    TableRow,
+    TextField,
     Typography,
 } from '@material-ui/core'
+
+import { getTargetUrl } from '../config/target.js'
 
 import { MoveIcon } from './MoveIcon.jsx'
 import { setMovePointer } from '../Game/gameLogic.ts'
@@ -19,16 +23,11 @@ export const MoveHistory = props => {
     }
 
     const { moveHistory } = props
-
-    const [selectedMove, setSelectedMove] = useState(0)
-
-    const selectMove = pointer => {
-        setSelectedMove(pointer)
-        setMovePointer(pointer)
-    }
-
     let topRef
     let bottomRef
+
+    const [selectedMove, setSelectedMove] = useState(0)
+    const [nameField, setNameField] = useState('')
 
     useEffect(() => {
         if (!moveHistory) {
@@ -37,6 +36,18 @@ export const MoveHistory = props => {
         setSelectedMove(moveHistory.length - 1)
         bottomRef.scrollIntoView({ behavior: 'smooth' })
     }, [moveHistory])
+
+    const selectMove = pointer => {
+        setSelectedMove(pointer)
+        setMovePointer(pointer)
+    }
+
+    const handleNameChange = event => {
+        setNameField(event.target.value)
+    }
+
+    const lastMove = moveHistory && moveHistory[moveHistory.length - 1]
+    const shouldSend = lastMove && lastMove.gameComplete && !lastMove.submitted
 
     return (
         <div
@@ -103,6 +114,8 @@ export const MoveHistory = props => {
                 )}
             </div>
 
+            {/*{shouldSend && (*/}
+            <>
                 <Divider />
                 <div>
                     <Typography color='textPrimary'>
@@ -115,12 +128,23 @@ export const MoveHistory = props => {
                             justifyContent: 'space-between',
                         }}
                     >
-                        <TextField placeholder='My Name' />
-                        <Button>Submit</Button>
+                        <TextField
+                            placeholder='Name'
+                            value={nameField}
+                            onChange={handleNameChange}
+                        />
+                        <Button
+                            onClick={() => {
+                                submitScore(moveHistory, nameField)
+                            }}
+                        >
+                            Submit
+                        </Button>
                     </div>
                 </div>
-
-            <Divider />
+                <Divider />
+            </>
+            {/*)}*/}
 
             <div
                 style={{
@@ -173,4 +197,11 @@ export const MoveHistory = props => {
             </div>
         </div>
     )
+}
+
+const submitScore = (moveHistory, name) => {
+    fetch(`${getTargetUrl()}/submit`, {
+        method: 'POST',
+        body: JSON.stringify(moveHistory),
+    })
 }

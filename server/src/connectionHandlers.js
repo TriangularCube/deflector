@@ -114,6 +114,7 @@ const submit = (req, res) => {
         const data = JSON.parse(chunks.join())
 
         // TODO: do something with data
+        console.log(data)
 
         // Return a 200 OKAY message
         res.writeHead(200, {
