@@ -36,7 +36,7 @@ export const Leaderboard = props => {
                             <TableRow key={index} hover>
                                 <TableCell>{element.name}</TableCell>
                                 <TableCell align='right'>
-                                    {element.moveHistory.length}
+                                    {element.moveHistory.length - 1}
                                 </TableCell>
                             </TableRow>
                         ))}
