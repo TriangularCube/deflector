@@ -27,7 +27,7 @@ export function draw(gameState: GameState) {
 
     drawSelection(context, gameState, tileSize)
 
-    drawTarget(context, gameState.target, gameState.gameComplete, tileSize)
+    drawTarget(context, gameState.target, tileSize)
 
     drawWalls(context, gameState.board, tileSize)
 
@@ -161,7 +161,7 @@ const drawSelection = (
     gameState: GameState,
     tileSize: number
 ) => {
-    if (!gameState.selection.piece || gameState.gameComplete) {
+    if (!gameState.selection.piece) {
         return
     }
 
@@ -191,7 +191,6 @@ const drawSelection = (
 const drawTarget = (
     context: CanvasRenderingContext2D,
     target: Target,
-    gameComplete: boolean,
     tileSize: number
 ) => {
     const targetX = target.coordinate[0]

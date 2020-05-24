@@ -25,7 +25,7 @@ const useStyles = makeStyles({
         height: 720,
     },
     sideBarSize: {
-        width: 300,
+        width: 350,
         height: 720,
     },
     sideBarPosition: {
@@ -106,6 +106,8 @@ export const GameArea = props => {
                     <MoveHistory
                         hidden={tabValue !== 0}
                         moveHistory={moveHistory}
+                        gameId={game._id}
+                        gameType={game.type}
                     />
                     <Leaderboard
                         hidden={tabValue !== 1}

@@ -90,6 +90,7 @@ const ClickHandler = event => {
                 ).length > 0
             ) {
                 // If clicked on a possible move
+                clickedOnMove = true
 
                 // Remove future entries from history
                 gameState.history = gameState.history.slice(
@@ -130,8 +131,6 @@ const ClickHandler = event => {
                 // Raise a moved event in the React view
                 invokeSideBarUpdate([...gameState.history])
 
-                clickedOnMove = true
-
                 break
             }
         }
@@ -158,34 +157,32 @@ const findPossibleMoves = () => {
         return
     }
 
-    if (gameState.selection.piece) {
-        for (const direction of [
-            'north' as Direction,
-            'east' as Direction,
-            'south' as Direction,
-            'west' as Direction,
-        ]) {
-            const route = []
-            let currentNode = [
-                ...gameState.selection.piece.coordinate,
-            ] as Coordinate
+    for (const direction of [
+        'north' as Direction,
+        'east' as Direction,
+        'south' as Direction,
+        'west' as Direction,
+    ]) {
+        const route = []
+        let currentNode = [
+            ...gameState.selection.piece.coordinate,
+        ] as Coordinate
 
-            do {
-                // TODO Nope, this isn't right
-                const nextNode = getNextNode(currentNode, direction)
+        do {
+            // TODO Nope, this isn't right
+            const nextNode = getNextNode(currentNode, direction)
 
-                if (nextNode) {
-                    route.push(nextNode)
-                }
-
-                currentNode = nextNode
-            } while (currentNode)
-
-            if (!gameState.selection.possibleMoves) {
-                gameState.selection.possibleMoves = {}
+            if (nextNode) {
+                route.push(nextNode)
             }
-            gameState.selection.possibleMoves[direction] = route
+
+            currentNode = nextNode
+        } while (currentNode)
+
+        if (!gameState.selection.possibleMoves) {
+            gameState.selection.possibleMoves = {}
         }
+        gameState.selection.possibleMoves[direction] = route
     }
 }
 

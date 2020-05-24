@@ -62,10 +62,10 @@ const connect = async (req, res) => {
     listOfConnections[clientID] = {
         connection: res,
         gameType: tokens[0],
-        gameID: tokens[1],
+        gameID: parseInt(tokens[1]),
     }
 
-    console.log(`Client ${clientID} has connected`)
+    console.log(`Client ${clientID} has connected for ${tokens[0]} ${tokens[1]}`)
 
     // Headers necessary to use SSE
     res.writeHead(200, {
@@ -109,12 +109,44 @@ const submit = (req, res) => {
         chunks.push(chunk)
     })
 
-    req.on('end', () => {
+    req.on('end', async () => {
         // Get the final JSON
         const data = JSON.parse(chunks.join())
 
         // TODO: do something with data
-        console.log(data)
+        const gameType = gameTypes[data.gameType]
+
+        if (gameType == null) {
+            badRequest(res, "No such game type")
+            return
+        }
+
+        const dataToInsert = {
+            moveHistory: data.moveHistory,
+            name: data.name.length < 1 ? 'Anonymous' : data.name,
+            time: new Date()
+        }
+
+        const success = await gameType.addNewSolution(data.gameId, dataToInsert)
+
+        if (!success) {
+            res.writeHead(500, {
+                'Access-Control-Allow-Origin': '*',
+            })
+            res.end('Server Side Error')
+            return
+        }
+
+        const game = await gameType.getGame(data.gameId)
+        const leaderboard = game.leaderboard
+
+        // TODO: Notify
+        const filtered = Object.values(listOfConnections).filter(element =>
+            element.gameType === data.gameType && element.gameID === data.gameId)
+
+        filtered.forEach(conn => {
+            conn.connection.write(`event: leaderboard\ndata: ${JSON.stringify(leaderboard)}\n\n`)
+        })
 
         // Return a 200 OKAY message
         res.writeHead(200, {

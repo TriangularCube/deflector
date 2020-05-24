@@ -33,8 +33,18 @@ const makeNewGame = async () => {
     return id
 }
 
+const addNewSolution = async (id, solution) => {
+    try {
+        await db.asyncUpdate({_id: id}, {'$push': {leaderboard: solution}})
+        return true
+    } catch ( e ) {
+        return false
+    }
+}
+
 module.exports = {
     makeNewGame,
     getNewestId,
     getGame,
+    addNewSolution,
 }

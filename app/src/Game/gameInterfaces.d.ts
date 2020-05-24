@@ -23,6 +23,7 @@ export type PieceColour = 'green' | 'yellow' | 'blue' | 'red' | 'silver'
 export type Coordinate = [number, number]
 
 export interface Board {
+    boardIds: String[]
     size: BoardSize
     walls: Coordinate[]
     goals: ColourAndLocation[]

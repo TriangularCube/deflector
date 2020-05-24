@@ -37,6 +37,8 @@ const generateBoard = () => {
     // Shuffle them
     quadrants = shuffle(quadrants)
 
+    newBoard.boardIds = quadrants.map(q => q.id)
+
     // Then rotate them as necessary
     for (const i of [1, 2, 3]) {
         quadrants[i] = rotateQuad(quadrants[i], i)

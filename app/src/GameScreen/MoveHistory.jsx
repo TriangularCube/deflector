@@ -10,6 +10,7 @@ import {
     TableRow,
     TextField,
     Typography,
+    CircularProgress,
 } from '@material-ui/core'
 
 import { getTargetUrl } from '../config/target.js'
@@ -22,12 +23,16 @@ export const MoveHistory = props => {
         return null
     }
 
-    const { moveHistory } = props
+    const { moveHistory, gameId, gameType } = props
     let topRef
     let bottomRef
 
     const [selectedMove, setSelectedMove] = useState(0)
     const [nameField, setNameField] = useState('')
+
+    const [sending, setSending] = useState(false)
+    const [sentScore, setSentScore] = useState(false)
+    const [sendError, setSendError] = useState(false)
 
     useEffect(() => {
         if (!moveHistory) {
@@ -35,6 +40,7 @@ export const MoveHistory = props => {
         }
         setSelectedMove(moveHistory.length - 1)
         bottomRef.scrollIntoView({ behavior: 'smooth' })
+        setSentScore(false)
     }, [moveHistory])
 
     const selectMove = pointer => {
@@ -46,8 +52,28 @@ export const MoveHistory = props => {
         setNameField(event.target.value)
     }
 
+    const submitScore = async () => {
+        setSending(true)
+        const res = await fetch(`${getTargetUrl()}/submit`, {
+            method: 'POST',
+            body: JSON.stringify({
+                moveHistory,
+                name: nameField,
+                gameType: gameType,
+                gameId: gameId,
+            }),
+        })
+        if (res.status === 200) {
+            setSentScore(true)
+            setSendError(false)
+        } else {
+            setSendError(true)
+        }
+        setSending(false)
+    }
+
     const lastMove = moveHistory && moveHistory[moveHistory.length - 1]
-    const shouldSend = lastMove && lastMove.gameComplete && !lastMove.submitted
+    const shouldSend = lastMove && lastMove.gameComplete
 
     return (
         <div
@@ -114,37 +140,55 @@ export const MoveHistory = props => {
                 )}
             </div>
 
-            {/*{shouldSend && (*/}
-            <>
-                <Divider />
-                <div>
-                    <Typography color='textPrimary'>
-                        Would you like to submit your score?
-                    </Typography>
-                    <div
-                        style={{
-                            display: 'flex',
-                            flexDirection: 'row',
-                            justifyContent: 'space-between',
-                        }}
-                    >
-                        <TextField
-                            placeholder='Name'
-                            value={nameField}
-                            onChange={handleNameChange}
-                        />
-                        <Button
-                            onClick={() => {
-                                submitScore(moveHistory, nameField)
-                            }}
-                        >
-                            Submit
-                        </Button>
-                    </div>
-                </div>
-                <Divider />
-            </>
-            {/*)}*/}
+            {shouldSend && (
+                <>
+                    <Divider />
+                    {!sending && !sentScore ? (
+                        <>
+                            {sendError ? (
+                                <Typography color='error'>
+                                    Something went wrong, try again
+                                </Typography>
+                            ) : (
+                                <Typography color='textPrimary'>
+                                    Would you like to submit your score?
+                                </Typography>
+                            )}
+
+                            <div
+                                style={{
+                                    display: 'flex',
+                                    flexDirection: 'row',
+                                    justifyContent: 'space-between',
+                                }}
+                            >
+                                <TextField
+                                    placeholder='Name'
+                                    value={nameField}
+                                    onChange={handleNameChange}
+                                />
+
+                                <Button onClick={submitScore}>Submit</Button>
+                            </div>
+                        </>
+                    ) : (
+                        <>
+                            {sending && (
+                                <CircularProgress
+                                    style={{ alignSelf: 'center' }}
+                                    size={24}
+                                />
+                            )}
+                            {sentScore && (
+                                <Typography style={{ alignSelf: 'center' }}>
+                                    Score sent!
+                                </Typography>
+                            )}
+                        </>
+                    )}
+                    <Divider />
+                </>
+            )}
 
             <div
                 style={{
@@ -197,11 +241,4 @@ export const MoveHistory = props => {
             </div>
         </div>
     )
-}
-
-const submitScore = (moveHistory, name) => {
-    fetch(`${getTargetUrl()}/submit`, {
-        method: 'POST',
-        body: JSON.stringify(moveHistory),
-    })
 }

@@ -1,13 +1,11 @@
 import React from 'react'
 
 import {
-    Divider,
     Typography,
-    TextField,
-    Button,
-    List,
-    ListItem,
-    ListItemText,
+    Table,
+    TableBody,
+    TableRow,
+    TableCell,
 } from '@material-ui/core'
 
 export const Leaderboard = props => {
@@ -27,19 +25,24 @@ export const Leaderboard = props => {
                 margin: 2,
             }}
         >
-            <div
-                style={{
-                    flex: 1,
-                }}
-            >
-                {leaderboard.length < 1 ? (
-                    <List>
-                        <ListItem alignItems='center'>
-                            <ListItemText>No entries yet!</ListItemText>
-                        </ListItem>
-                    </List>
-                ) : null}
-            </div>
+            {leaderboard.length < 1 ? (
+                <Typography style={{ alignSelf: 'center' }}>
+                    No entries yet!
+                </Typography>
+            ) : (
+                <Table>
+                    <TableBody>
+                        {leaderboard.map((element, index) => (
+                            <TableRow key={index} hover>
+                                <TableCell>{element.name}</TableCell>
+                                <TableCell align='right'>
+                                    {element.moveHistory.length}
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            )}
         </div>
     )
 }
