@@ -6,17 +6,19 @@ let gameState: GameState = null
 
 let invokeSideBarUpdate = null
 
-export function setupGame(canvas, game, raiseMoveEvent): void {
+export function setupGame(canvas, game, raiseMoveEvent, history = null): void {
     gameState = {
         board: deepcopy(game.board),
         target: deepcopy(game.puzzle.target),
-        history: [
-            {
-                move: null,
-                state: deepcopy(game.puzzle.pieces),
-                gameComplete: false,
-            },
-        ],
+        history: history
+            ? history
+            : [
+                  {
+                      move: null,
+                      state: deepcopy(game.puzzle.pieces),
+                      gameComplete: false,
+                  },
+              ],
         historyPointer: {
             index: 0,
             positions: deepcopy(game.puzzle.pieces),

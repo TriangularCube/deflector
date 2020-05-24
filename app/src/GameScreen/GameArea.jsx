@@ -5,7 +5,7 @@ import { Container, Tabs, Tab } from '@material-ui/core'
 import { Skeleton } from '@material-ui/lab'
 import clsx from 'clsx'
 
-import { setupGame } from '../Game/gameLogic.ts'
+import { setupGame, setMovePointer } from '../Game/gameLogic.ts'
 import { MoveHistory } from './MoveHistory.jsx'
 import { Leaderboard } from './Leaderboard.jsx'
 
@@ -45,6 +45,8 @@ export const GameArea = props => {
     const classes = useStyles()
 
     const [moveHistory, setMoveHistory] = useState(null)
+    const [selectedMove, setSelectedMove] = useState(0)
+    const [isViewingSolution, setViewingSolution] = useState(false)
 
     const game = props.game
     const canvasRef = useRef(null)
@@ -55,6 +57,15 @@ export const GameArea = props => {
             return
         }
 
+        readyGame()
+    }, [game])
+
+    const makeMove = newHistory => {
+        setMoveHistory(newHistory)
+        setViewingSolution(false)
+    }
+
+    const readyGame = (moveList = null) => {
         // Get Canvas Context from the ref
         const canvas = canvasRef.current
 
@@ -65,8 +76,18 @@ export const GameArea = props => {
         canvas.width = 720
         canvas.height = 720
 
-        setupGame(canvas, game, setMoveHistory)
-    }, [game])
+        setupGame(canvas, game, makeMove, moveList)
+
+        if (moveList) {
+            setMovePointer(moveList.length - 1)
+            setViewingSolution(true)
+        }
+    }
+
+    const viewSolution = moveList => {
+        readyGame(moveList)
+        setTabValue(0)
+    }
 
     return (
         <Container maxWidth='lg' className={classes.container}>
@@ -108,9 +129,13 @@ export const GameArea = props => {
                         moveHistory={moveHistory}
                         gameId={game._id}
                         gameType={game.type}
+                        selectedMove={selectedMove}
+                        setSelectedMove={setSelectedMove}
+                        isViewingSolution={isViewingSolution}
                     />
                     <Leaderboard
                         hidden={tabValue !== 1}
+                        viewSolution={viewSolution}
                         leaderboard={game.leaderboard}
                     />
                 </div>

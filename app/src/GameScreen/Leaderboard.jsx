@@ -33,7 +33,13 @@ export const Leaderboard = props => {
                 <Table>
                     <TableBody>
                         {leaderboard.map((element, index) => (
-                            <TableRow key={index} hover>
+                            <TableRow
+                                key={index}
+                                hover
+                                onClick={() => {
+                                    props.viewSolution(element.moveHistory)
+                                }}
+                            >
                                 <TableCell>{element.name}</TableCell>
                                 <TableCell align='right'>
                                     {element.moveHistory.length - 1}

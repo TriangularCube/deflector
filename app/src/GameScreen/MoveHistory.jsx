@@ -23,11 +23,17 @@ export const MoveHistory = props => {
         return null
     }
 
-    const { moveHistory, gameId, gameType } = props
+    const {
+        moveHistory,
+        gameId,
+        gameType,
+        selectedMove,
+        setSelectedMove,
+        isViewingSolution
+    } = props
     let topRef
     let bottomRef
 
-    const [selectedMove, setSelectedMove] = useState(0)
     const [nameField, setNameField] = useState('')
 
     const [sending, setSending] = useState(false)
@@ -73,7 +79,7 @@ export const MoveHistory = props => {
     }
 
     const lastMove = moveHistory && moveHistory[moveHistory.length - 1]
-    const shouldSend = lastMove && lastMove.gameComplete
+    const shouldSend = lastMove && lastMove.gameComplete && !isViewingSolution
 
     return (
         <div
