@@ -25,7 +25,8 @@ const generatePuzzleFromBoard = board => {
             colour,
             coordinate: generateRandomCoordinate(
                 board,
-                puzzle.pieces.map(element => element.coordinate)
+                // This needs to get fixed soon
+                puzzle.pieces.map(element => element.coordinate).concat(puzzle.target.coordinate)
             ),
         })
     }

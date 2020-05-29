@@ -13,6 +13,7 @@ const useStyles = makeStyles({
     container: {
         display: 'grid',
         paddingTop: 30,
+        paddingBottom: 30,
     },
     canvasPosition: {
         gridColumn: 1,
