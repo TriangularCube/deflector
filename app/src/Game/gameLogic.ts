@@ -108,7 +108,9 @@ const ClickHandler = event => {
                 // Check for game completion
                 let gameOver = false
                 if (
-                    currentSelectedPiece.colour === gameState.target.colour &&
+                    (gameState.target.colour === 'any' ||
+                        currentSelectedPiece.colour ===
+                            gameState.target.colour) &&
                     currentSelectedPiece.coordinate[0] ===
                         gameState.target.coordinate[0] &&
                     currentSelectedPiece.coordinate[1] ===
