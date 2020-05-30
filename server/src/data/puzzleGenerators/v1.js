@@ -7,7 +7,8 @@ const generateRandomCoordinate = (board, blacklist) => {
     } while (
         board.notValid.some(element => element[0] === x && element[1] === y) ||
         board.goals.some(element => element[0] === x && element[1] === y) ||
-        (blacklist && blacklist.some(element => element[0] === x && element[1] === y))
+        (blacklist &&
+            blacklist.some(element => element[0] === x && element[1] === y))
     )
 
     return [x, y]
@@ -21,13 +22,12 @@ const generatePuzzleFromBoard = board => {
     puzzle.pieces = []
 
     for (const colour of ['red', 'green', 'blue', 'yellow', 'silver']) {
+        let blacklist = puzzle.pieces.map(element => element.coordinate)
+        blacklist.push(puzzle.target.coordinate)
+
         puzzle.pieces.push({
             colour,
-            coordinate: generateRandomCoordinate(
-                board,
-                // This needs to get fixed soon
-                puzzle.pieces.map(element => element.coordinate).concat(puzzle.target.coordinate)
-            ),
+            coordinate: generateRandomCoordinate(board, blacklist),
         })
     }
 
