@@ -22,7 +22,7 @@ const generatePuzzleFromBoard = board => {
     puzzle.pieces = []
 
     for (const colour of ['red', 'green', 'blue', 'yellow', 'silver']) {
-        let blacklist = puzzle.pieces.map(element => element.coordinate)
+        const blacklist = puzzle.pieces.map(element => element.coordinate)
         blacklist.push(puzzle.target.coordinate)
 
         puzzle.pieces.push({
