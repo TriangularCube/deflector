@@ -29,7 +29,7 @@ export const MoveHistory = props => {
         gameType,
         selectedMove,
         setSelectedMove,
-        isViewingSolution
+        isViewingSolution,
     } = props
     let topRef
     let bottomRef
