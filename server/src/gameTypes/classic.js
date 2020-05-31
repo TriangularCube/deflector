@@ -19,6 +19,8 @@ const getGame = async id => {
 
 const makeNewGame = async () => {
     const newBoard = generateBoard()
+    const newPuzzle = generatePuzzleFromBoard(newBoard)
+    // TODO: generate solved path
 
     const id = await db.getNextId()
 
@@ -27,7 +29,7 @@ const makeNewGame = async () => {
         time: Date.now(),
         board: newBoard,
         leaderboard: [],
-        puzzle: generatePuzzleFromBoard(newBoard),
+        puzzle: newPuzzle,
     })
 
     return id
