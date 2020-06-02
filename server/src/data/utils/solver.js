@@ -41,72 +41,95 @@ const directions = {
     East: 'east',
     West: 'west',
 }
-const iterate = (node, board, target) => {
+const iterate = (node, board) => {
     let results = []
 
     for (const piece of node.pieces) {
         for (const direction of directions) {
+            const result = findEndPoint(piece, direction, board, node.pieces)
+
+            const newNode = deepcopy(node)
+
+
+            results.push(result)
         }
     }
+
+    return results
 }
 
 const findEndPoint = (movingPiece, startingDirection, board, allPieces) => {
+    let finalCoordinate = undefined
+
     let currentCoordinate = deepcopy(movingPiece.coordinate)
-    let finalCoordinate = null
-
     let nextDirection = startingDirection
-    let nextCoordinate
-    switch (nextDirection) {
-        case directions.East:
-            nextCoordinate = currentCoordinate[0] + 1
-            break
-        case directions.West:
-            nextCoordinate = currentCoordinate[0] - 1
-            break
-        case directions.North:
-            nextCoordinate = currentCoordinate[1] + 1
-            break
-        case directions.South:
-            nextCoordinate = currentCoordinate[1] - 1
-    }
 
-    // Check for invalid
-    const filterNotValid = board.notValid.filter(deadTile =>
-        isCoordinateEqual(nextCoordinate, deadTile)
-    )
-    if (filterNotValid.length > 0) {
-        return currentCoordinate
-    }
+    while (true) {
+        let nextCoordinate = deepcopy(currentCoordinate)
+        switch (nextDirection) {
+            case directions.East:
+                nextCoordinate[0] += 1
+                break
+            case directions.West:
+                nextCoordinate[0] -= 1
+                break
+            case directions.North:
+                nextCoordinate[1] += 1
+                break
+            case directions.South:
+                nextCoordinate[1] -= 1
+        }
 
-    // Check for other pieces
-    const filterPieces = allPieces.filter(
-        piece =>
-            piece.colour !== movingPiece.colour &&
-            isCoordinateEqual(piece, nextCoordinate)
-    )
-    if (filterPieces.length > 0) {
-        return currentCoordinate
-    }
-
-    // Check for Walls
-    const filterWalls = board.walls.filter(wall => {
-        const wall1 = wall[0]
-        const wall2 = wall[1]
-
-        // No guarantee of direction, so have to test both
-        return (
-            (isCoordinateEqual(wall1, currentCoordinate) &&
-                isCoordinateEqual(wall2, nextCoordinate)) ||
-            (isCoordinateEqual(wall2, currentCoordinate) &&
-                isCoordinateEqual(wall1, nextCoordinate))
+        // Check for invalid
+        const filterNotValid = board.notValid.filter(deadTile =>
+            isCoordinateEqual(nextCoordinate, deadTile)
         )
-    })
-    if (filterWalls.length > 0) {
-        return currentCoordinate
-    }
-}
+        if (filterNotValid.length > 0) {
+            finalCoordinate = currentCoordinate
+            break
+        }
 
-// const findNextNode = (piece, x)
+        // Check for other pieces
+        const filterPieces = allPieces.filter(
+            piece =>
+                piece.colour !== movingPiece.colour &&
+                isCoordinateEqual(piece, nextCoordinate)
+        )
+        if (filterPieces.length > 0) {
+            finalCoordinate = currentCoordinate
+            break
+        }
+
+        // Check for Walls
+        const filterWalls = board.walls.filter(wall => {
+            const wall1 = wall[0]
+            const wall2 = wall[1]
+
+            // No guarantee of direction, so have to test both
+            return (
+                (isCoordinateEqual(wall1, currentCoordinate) &&
+                    isCoordinateEqual(wall2, nextCoordinate)) ||
+                (isCoordinateEqual(wall2, currentCoordinate) &&
+                    isCoordinateEqual(wall1, nextCoordinate))
+            )
+        })
+        if (filterWalls.length > 0) {
+            finalCoordinate = currentCoordinate
+            break
+        }
+
+        // TODO: If entire move is invalid
+        // finalCoordinate = null
+
+        currentCoordinate = nextCoordinate
+    }
+
+    if (finalCoordinate && isCoordinateEqual(finalCoordinate, movingPiece.coordinate)) {
+        return null
+    }
+
+    return finalCoordinate
+}
 
 const checkWin = (node, target) => {
     const targetColour = target.colour
