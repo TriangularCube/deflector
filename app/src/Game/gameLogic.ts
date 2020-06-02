@@ -87,8 +87,8 @@ const ClickHandler = event => {
             gameState.selection.possibleMoves
         )) {
             if (
-                array.filter(
-                    tile => tile[0] === clickedX && tile[1] === clickedY
+                array.filter(tile =>
+                    isCoordinateEqual(tile, [clickedX, clickedY])
                 ).length > 0
             ) {
                 // If clicked on a possible move
@@ -111,10 +111,10 @@ const ClickHandler = event => {
                     (gameState.target.colour === 'any' ||
                         currentSelectedPiece.colour ===
                             gameState.target.colour) &&
-                    currentSelectedPiece.coordinate[0] ===
-                        gameState.target.coordinate[0] &&
-                    currentSelectedPiece.coordinate[1] ===
-                        gameState.target.coordinate[1]
+                    isCoordinateEqual(
+                        currentSelectedPiece.coordinate,
+                        gameState.target.coordinate
+                    )
                 ) {
                     // Yup, hit our target
                     gameOver = true
@@ -144,8 +144,7 @@ const ClickHandler = event => {
         // Otherwise find if clicked on a piece
         gameState.selection.piece = gameState.historyPointer.positions.find(
             element =>
-                element.coordinate[0] === clickedX &&
-                element.coordinate[1] === clickedY
+                isCoordinateEqual(element.coordinate, [clickedX, clickedY])
         )
     }
 
@@ -226,8 +225,8 @@ const getNextNode = (
 
 const isBlocked = (current, next) => {
     // Check for Non-Valid tiles
-    const filterNotValid = gameState.board.notValid.filter(
-        deadTile => next[0] === deadTile[0] && next[1] === deadTile[1]
+    const filterNotValid = gameState.board.notValid.filter(deadTile =>
+        isCoordinateEqual(next, deadTile)
     )
     if (filterNotValid.length > 0) {
         return true
@@ -237,8 +236,7 @@ const isBlocked = (current, next) => {
     const filterPieces = gameState.historyPointer.positions.filter(
         piece =>
             piece.colour !== gameState.selection.piece.colour &&
-            piece.coordinate[0] === next[0] &&
-            piece.coordinate[1] === next[1]
+            isCoordinateEqual(piece, next)
     )
     if (filterPieces.length > 0) {
         return true
@@ -251,18 +249,20 @@ const isBlocked = (current, next) => {
 
         // No guarantee of direction, so have to test both
         return (
-            (wall1[0] === current[0] &&
-                wall1[1] === current[1] &&
-                wall2[0] === next[0] &&
-                wall2[1] === next[1]) ||
-            (wall1[0] === next[0] &&
-                wall1[1] === next[1] &&
-                wall2[0] === current[0] &&
-                wall2[1] === current[1])
+            (isCoordinateEqual(wall1, current) &&
+                isCoordinateEqual(wall2, next)) ||
+            (isCoordinateEqual(wall1, next) &&
+                isCoordinateEqual(wall2, current))
         )
     })
 
     return filterWalls.length !== 0
+}
+
+const isCoordinateEqual = (coordinate1, coordinate2) => {
+    return (
+        coordinate1[0] === coordinate2[0] && coordinate1[1] === coordinate2[1]
+    )
 }
 
 const invokeDraw = () => draw(gameState)

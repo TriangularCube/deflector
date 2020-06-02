@@ -39,24 +39,24 @@ const directions = {
     North: 'north',
     South: 'south',
     East: 'east',
-    West: 'west'
+    West: 'west',
 }
 const iterate = (node, board, target) => {
     let results = []
 
-    for ( const piece of node.pieces ) {
-        for ( const direction of directions ) {
-
+    for (const piece of node.pieces) {
+        for (const direction of directions) {
         }
     }
 }
 
 const findEndPoint = (movingPiece, startingDirection, board, allPieces) => {
     let currentCoordinate = deepcopy(movingPiece.coordinate)
+    let finalCoordinate = null
 
     let nextDirection = startingDirection
     let nextCoordinate
-    switch ( nextDirection ) {
+    switch (nextDirection) {
         case directions.East:
             nextCoordinate = currentCoordinate[0] + 1
             break
@@ -71,8 +71,8 @@ const findEndPoint = (movingPiece, startingDirection, board, allPieces) => {
     }
 
     // Check for invalid
-    const filterNotValid = board.notValid.filter(
-        deadTile => nextCoordinate[0] === deadTile[0] && nextCoordinate[1] === deadTile[1]
+    const filterNotValid = board.notValid.filter(deadTile =>
+        isCoordinateEqual(nextCoordinate, deadTile)
     )
     if (filterNotValid.length > 0) {
         return currentCoordinate
@@ -82,8 +82,7 @@ const findEndPoint = (movingPiece, startingDirection, board, allPieces) => {
     const filterPieces = allPieces.filter(
         piece =>
             piece.colour !== movingPiece.colour &&
-            piece.coordinate[0] === nextCoordinate[0] &&
-            piece.coordinate[1] === nextCoordinate[1]
+            isCoordinateEqual(piece, nextCoordinate)
     )
     if (filterPieces.length > 0) {
         return currentCoordinate
@@ -96,43 +95,39 @@ const findEndPoint = (movingPiece, startingDirection, board, allPieces) => {
 
         // No guarantee of direction, so have to test both
         return (
-            (wall1[0] === currentCoordinate[0] &&
-                wall1[1] === currentCoordinate[1] &&
-                wall2[0] === nextCoordinate[0] &&
-                wall2[1] === nextCoordinate[1]) ||
-            (wall1[0] === nextCoordinate[0] &&
-                wall1[1] === nextCoordinate[1] &&
-                wall2[0] === currentCoordinate[0] &&
-                wall2[1] === currentCoordinate[1])
+            (isCoordinateEqual(wall1, currentCoordinate) &&
+                isCoordinateEqual(wall2, nextCoordinate)) ||
+            (isCoordinateEqual(wall2, currentCoordinate) &&
+                isCoordinateEqual(wall1, nextCoordinate))
         )
     })
+    if (filterWalls.length > 0) {
+        return currentCoordinate
+    }
 }
 
-const findNextNode = (piece, x)
+// const findNextNode = (piece, x)
 
 const checkWin = (node, target) => {
     const targetColour = target.colour
 
     if (targetColour === 'any') {
         for (const piece of node.pieces) {
-            if (isPieceAtTarget(piece, target.coordinate)) {
+            if (isCoordinateEqual(piece, target.coordinate)) {
                 return true
             }
         }
     } else {
-        return isPieceAtTarget(node.pieces[targetColour], target.coordinate)
+        return isCoordinateEqual(node.pieces[targetColour], target.coordinate)
     }
 
     return false
 }
 
-const isPieceAtTarget = (piece, targetCoordinate) => {
-    if (
-        piece.coordinate[0] === targetCoordinate[0] &&
-        piece.coordinate[1] === targetCoordinate[1]
-    ) {
-        return true
-    }
+const isCoordinateEqual = (coordinate1, coordinate2) => {
+    return (
+        coordinate1[0] === coordinate2[0] && coordinate1[1] === coordinate2[1]
+    )
 }
 
 module.exports = {
