@@ -1,0 +1,24 @@
+{
+  "name": "deflector",
+  "version": "1.0.0",
+  "description": "Deflector: A Ricochet Robot implementation.",
+  "scripts": {
+    "deploy": "concurrently \"npm run deploy:server\" \"npm run deploy:app\"",
+    "deploy:server": "cd server && npm run deploy",
+    "deploy:app": "cd app && npm run deploy"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TriangularCube/deflector.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TriangularCube/deflector/issues"
+  },
+  "homepage": "https://github.com/TriangularCube/deflector#readme",
+  "devDependencies": {
+    "concurrently": "^5.2.0"
+  }
+}
