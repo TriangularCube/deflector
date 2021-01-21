@@ -1,13 +1,8 @@
 Deflector: A Ricochet Robot implementation.
 
-Visit https://deflector.io to play. New puzzle every hour.
+Visit https://deflector.io to play.
 
 ----
 App created with [Material UI](https://material-ui.com).
 
-Server uses NeDB to store generated puzzles.
-
-##### Planned Features
-- Leaderboard
-- Solver
-- Custom Boards
+V2 development in progress
