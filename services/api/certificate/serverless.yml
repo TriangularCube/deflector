@@ -1,0 +1,38 @@
+service: deflector-api-certificate
+
+plugins:
+  - serverless-deployment-bucket
+
+custom:
+  # Our stage is based on what is passed in when running serverless
+  # commands. Or falls back to what we have set in the provider section.
+  stage: ${opt:stage, self:provider.stage}
+  prefix:
+    production: ''
+    other: ${self:custom.stage}.
+
+provider:
+  name: aws
+  stage: dev
+  region: us-east-1 # Edge API needs certificate in this region
+  deploymentBucket:
+    name: deflector-certificate-deployment-${self:custom.stage}
+    serverSideEncryption: AES256
+
+resources:
+  Description: The Serverless template for deploying API resources
+
+  Resources:
+    DeflectorAPICertificate:
+      Type: AWS::CertificateManager::Certificate
+      Properties:
+        DomainName: ${self:custom.prefix.${self:custom.stage}, self:custom.prefix.other}api.deflector.io
+        ValidationMethod: DNS
+
+  Outputs:
+    GatewayCertificate:
+      Value:
+        Ref: DeflectorAPICertificate
+      Export:
+        Name: ${self:custom.stage}-Deflector-certificate
+    
