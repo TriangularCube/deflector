@@ -7,14 +7,11 @@ custom:
   # Our stage is based on what is passed in when running serverless
   # commands. Or falls back to what we have set in the provider section.
   stage: ${opt:stage, self:provider.stage}
-  prefix:
-    production: ''
-    other: ${self:custom.stage}.
 
 provider:
   name: aws
   runtime: nodejs12.x
-  stage: dev
+  stage: edge
   region: ca-central-1
   deploymentBucket:
     name: deflector-deployment-${self:custom.stage}
@@ -30,25 +27,6 @@ resources:
         Name: ${self:custom.stage}-DeflectorGateway
         Description: API Gateway for Deflector.io
         # TODO: Disable default endpoint, not yet supported in CF
-
-    DeflectorDomain:
-      Type: AWS::ApiGateway::DomainName
-      Properties:
-        # The ${cf.REGION} syntax uses the OUTPUT Resource NAME,
-        #   not the export name, since it doesn't actually go
-        #   through CF (this is a Serverless extension)
-        CertificateArn: ${cf.us-east-1:deflector-api-certificate
-          -${self:custom.stage}.GatewayCertificate}
-        DomainName: ${self:custom.prefix.${self:custom.stage},
-          self:custom.prefix.other}api.deflector.io
-        SecurityPolicy: TLS_1_2
-
-    DeflectorAPIMapping:
-      Type: AWS::ApiGateway::BasePathMapping
-      Properties:
-        DomainName: !Ref DeflectorDomain
-        RestApiId: !Ref DeflectorGateway
-        Stage: dev
 
   Outputs:
     ApiGatewayRestApiID:

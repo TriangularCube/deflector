@@ -1,0 +1,2 @@
+before_build:
+  - cd services && npm install

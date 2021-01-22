@@ -13,7 +13,7 @@ custom:
 
 provider:
   name: aws
-  stage: dev
+  stage: edge
   region: us-east-1 # Edge API needs certificate in this region
   deploymentBucket:
     name: deflector-certificate-deployment-${self:custom.stage}
@@ -26,7 +26,8 @@ resources:
     DeflectorAPICertificate:
       Type: AWS::CertificateManager::Certificate
       Properties:
-        DomainName: ${self:custom.prefix.${self:custom.stage}, self:custom.prefix.other}api.deflector.io
+        DomainName: ${self:custom.prefix.${self:custom.stage},
+          self:custom.prefix.other}api.deflector.io
         ValidationMethod: DNS
 
   Outputs:

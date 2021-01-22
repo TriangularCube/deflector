@@ -11,7 +11,7 @@ custom:
 provider:
   name: aws
   runtime: nodejs12.x
-  stage: dev
+  stage: edge
   region: ca-central-1
   deploymentBucket:
     name: deflector-deployment-${self:custom.stage}
