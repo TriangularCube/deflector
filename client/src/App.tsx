@@ -5,8 +5,9 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import { CssBaseline } from '@material-ui/core'
 
 import { Navbar } from './Navbar'
-import { About } from './About'
-import { FeaturedPuzzle } from './FeaturedPuzzle'
+import { Splash } from './pages/Splash'
+import { About } from './pages/About'
+import { ClassicPuzzle } from './pages/ClassicPuzzle'
 
 const App: FC = (): ReactElement => {
   return (
@@ -20,8 +21,12 @@ const App: FC = (): ReactElement => {
             <About />
           </Route>
 
-          <Route path='/featured/:id?'>
-            <FeaturedPuzzle />
+          <Route path='/classic/:id?'>
+            <ClassicPuzzle />
+          </Route>
+
+          <Route exact path='/'>
+            <Splash />
           </Route>
         </Switch>
       </Router>
