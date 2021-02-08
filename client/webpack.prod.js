@@ -1,3 +1,4 @@
+const HtmlWebPackPlugin = require('html-webpack-plugin')
 const { merge } = require('webpack-merge')
 const common = require('./webpack.common.js')
 
@@ -6,6 +7,13 @@ module.exports = merge(common, {
   output: {
     filename: '[name].[contenthash].js',
   },
+  plugins: [
+    new HtmlWebPackPlugin({
+      filename: 'index.html',
+      template: './src/index.html.ejs',
+      environment: 'prod',
+    }),
+  ],
   optimization: {
     runtimeChunk: 'single',
     splitChunks: {

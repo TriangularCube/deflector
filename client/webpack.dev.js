@@ -1,3 +1,4 @@
+const HtmlWebPackPlugin = require('html-webpack-plugin')
 const { merge } = require('webpack-merge')
 const common = require('./webpack.common.js')
 
@@ -13,4 +14,11 @@ module.exports = merge(common, {
     historyApiFallback: true,
     hot: true,
   },
+  plugins: [
+    new HtmlWebPackPlugin({
+      filename: 'index.html',
+      template: './src/index.html.ejs',
+      environment: 'dev',
+    }),
+  ],
 })

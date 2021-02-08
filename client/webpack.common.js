@@ -1,4 +1,3 @@
-const HtmlWebPackPlugin = require('html-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const path = require('path')
 
@@ -15,12 +14,6 @@ module.exports = {
         use: 'ts-loader',
         exclude: /node_modules/,
       },
-      {
-        test: /\.html$/,
-        use: {
-          loader: 'html-loader',
-        },
-      },
     ],
   },
   resolve: {
@@ -31,11 +24,5 @@ module.exports = {
     'react-dom': 'ReactDOM',
     'react-router-dom': 'ReactRouterDOM',
   },
-  plugins: [
-    new HtmlWebPackPlugin({
-      filename: 'index.html',
-      template: './src/index.html',
-    }),
-    new CleanWebpackPlugin(),
-  ],
+  plugins: [new CleanWebpackPlugin()],
 }
