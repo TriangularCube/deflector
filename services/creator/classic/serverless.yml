@@ -1,0 +1,25 @@
+service: deflector-creator-classic
+
+plugins:
+  - serverless-deployment-bucket
+
+custom:
+  # Our stage is based on what is passed in when running serverless
+  # commands. Or falls back to what we have set in the provider section.
+  stage: ${opt:stage, self:provider.stage}
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: edge
+  region: ca-central-1
+  deploymentBucket:
+    name: deflector-deployment-${self:custom.stage}
+    serverSideEncryption: AES256
+
+functions:
+ classic-creator:
+    handler: creator.handler
+    events:
+      - schedule:
+          rate: rate(10 minutes)
