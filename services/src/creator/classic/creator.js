@@ -1,4 +1,6 @@
-module.exports.handler = (event) => {
+import { Boards } from './utils/quadrants.js'
+
+export const handler = () => {
   console.log('Creator!!')
-  console.log(event)
+  console.log(Boards.A[1])
 }

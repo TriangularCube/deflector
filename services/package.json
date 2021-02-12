@@ -2,17 +2,18 @@
   "name": "deflector-services",
   "description": "Backend services for Deflector",
   "author": "Michael Liu",
-  "scripts": {
-    "start": ""
-  },
   "devDependencies": {
     "prettier": "^2.2.1",
-    "serverless": "^2.21.1",
+    "serverless": "^2.23.0",
+    "serverless-bundle": "^4.2.0",
     "serverless-deployment-bucket": "^1.3.0",
     "serverless-offline": "^6.8.0",
     "serverless-offline-multi": "^1.2.0",
-    "serverless-webpack": "^5.3.5",
     "typescript": "^4.1.3",
     "webpack": "^5.19.0"
+  },
+  "dependencies": {
+    "deepcopy": "^2.1.0",
+
   }
 }
