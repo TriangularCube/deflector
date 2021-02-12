@@ -3,17 +3,19 @@
   "description": "Backend services for Deflector",
   "author": "Michael Liu",
   "devDependencies": {
+    "eslint": "^7.19.0",
+    "eslint-config-prettier": "^7.2.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-prettier": "^3.3.1",
     "prettier": "^2.2.1",
     "serverless": "^2.23.0",
     "serverless-bundle": "^4.2.0",
     "serverless-deployment-bucket": "^1.3.0",
     "serverless-offline": "^6.8.0",
-    "serverless-offline-multi": "^1.2.0",
-    "typescript": "^4.1.3",
-    "webpack": "^5.19.0"
+    "serverless-offline-multi": "^1.2.0"
   },
   "dependencies": {
     "deepcopy": "^2.1.0",
-
+    "shuffle-array": "^1.0.1"
   }
 }
