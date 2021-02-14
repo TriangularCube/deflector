@@ -15,7 +15,9 @@
     "serverless-offline-multi": "^1.2.0"
   },
   "dependencies": {
+    "@aws-sdk/client-ssm": "^3.5.0",
     "deepcopy": "^2.1.0",
+    "faunadb": "^4.0.3",
     "shuffle-array": "^1.0.1"
   }
 }

@@ -1,0 +1,6 @@
+-   Effect: 'Allow'
+    Action: 'ssm:GetParameters'
+    Resource:
+      - arn:aws:ssm:us-west-2:852768116392:parameter/fauna/FaunaKey-${self:custom.stage}
+
+# Using default key from AWS, so all users should have permission already

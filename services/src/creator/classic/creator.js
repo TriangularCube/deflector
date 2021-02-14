@@ -3,6 +3,7 @@ import shuffle from 'shuffle-array'
 
 import { Boards } from './utils/quadrants.js'
 import { rotateQuad, shiftQuad } from './utils/manipulate.js'
+import { wallNormalizer } from '../utils/normalize.js'
 
 const createNewBoard = () => {
   const newBoard = {}
@@ -44,7 +45,7 @@ const createNewBoard = () => {
   })
   // Normalize All Wall Coordinates
   newWalls.forEach((wall, index) => {
-    newWalls[index] = normalize(wall)
+    newWalls[index] = wallNormalizer(wall)
   })
 
   newBoard.walls = newWalls
@@ -64,6 +65,47 @@ const createNewBoard = () => {
   return newBoard
 }
 
+const generateRandomCoordinate = (board, blacklist) => {
+  let x, y
+
+  do {
+    x = Math.floor(Math.random() * board.size.x)
+    y = Math.floor(Math.random() * board.size.y)
+  } while (
+    board.notValid.some(element => element[0] === x && element[1] === y) ||
+    board.goals.some(element => element[0] === x && element[1] === y) ||
+    (blacklist &&
+      blacklist.some(element => element[0] === x && element[1] === y))
+  )
+
+  return [x, y]
+}
+
+const generatePuzzleFromBoard = board => {
+  const puzzle = {}
+
+  puzzle.target = board.goals[Math.floor(Math.random() * board.goals.length)]
+
+  puzzle.pieces = []
+
+  for (const colour of ['red', 'green', 'blue', 'yellow', 'silver']) {
+    let blacklist = puzzle.pieces.map(element => element.coordinate)
+    blacklist.push(puzzle.target.coordinate)
+
+    puzzle.pieces.push({
+      colour,
+      coordinate: generateRandomCoordinate(board, blacklist),
+    })
+  }
+
+  // TODO make sure generated puzzle can't be solved in less than X moves
+
+  return puzzle
+}
+
 export const handler = () => {
-  console.log(createNewBoard())
+  const board = createNewBoard()
+  const puzzle = generatePuzzleFromBoard(board)
+
+  console.log(puzzle)
 }
