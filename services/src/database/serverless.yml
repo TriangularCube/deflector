@@ -1,8 +1,7 @@
-service: deflector-creator-classic
+service: deflector-db
 
 plugins:
   - serverless-deployment-bucket
-  - serverless-bundle
 
 custom:
   # Our stage is based on what is passed in when running serverless
@@ -26,12 +25,22 @@ provider:
     STAGE: ${self:custom.stage}
   iamRoleStatements:
     # Copy the role statements to avoid errors
-    ${ file( ../../common/faunaRole.yml ) }
+    ${ file( ../common/faunaRole.yml ) }
 
-functions:
-  classic-creator:
-    handler: creator.handler
-    events:
-      - schedule:
-          rate: rate(10 minutes)
-          enabled: false
+resources:
+  Resources:
+    ClassicPuzzles:
+      Type: Custom::FaunaCollection
+      Properties:
+        ServiceToken: !ImportValue fauna-collection-lambda-arn
+        CollectionName: classic-puzzles
+        KeyParameterSecure: ${self:custom.key}
+        Indexes:
+          ClassicPuzzlesByTime:
+            Name: classic-puzzles-by-time
+            Values:
+              - field:
+                  - ts
+                reverse: true
+              - field:
+                  - ref

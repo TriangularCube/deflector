@@ -89,7 +89,7 @@ const generatePuzzleFromBoard = board => {
   puzzle.pieces = []
 
   for (const colour of ['red', 'green', 'blue', 'yellow', 'silver']) {
-    let blacklist = puzzle.pieces.map(element => element.coordinate)
+    const blacklist = puzzle.pieces.map(element => element.coordinate)
     blacklist.push(puzzle.target.coordinate)
 
     puzzle.pieces.push({
@@ -107,5 +107,6 @@ export const handler = () => {
   const board = createNewBoard()
   const puzzle = generatePuzzleFromBoard(board)
 
+  console.log(board)
   console.log(puzzle)
 }
